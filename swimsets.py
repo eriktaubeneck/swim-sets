@@ -17,7 +17,7 @@ class SwimSet:
         self.time = time
         self.rounds = rounds
         self.msg = msg
-        self.subsets = subsets
+        self.subsets = subsets or []
         self.print_full_stats = print_full_stats
 
     @property
@@ -36,7 +36,7 @@ class SwimSet:
             return self.distance * self.rounds
         return self.rounds * sum(s.total_distance for s in self.subsets)
 
-    def pprint(self, indents=0):
+    def pprint(self):
         msg = ''
         if self.rounds > 1:
             msg += f'{self.rounds}x '
@@ -52,9 +52,10 @@ class SwimSet:
                 msg += f'(total time: {self.total_time}, '
             msg += f'total distance: {self.total_distance})'
         msg += '\n'
-        if self.is_superset:
-            submsg = ''.join([indents*'   ' + s.pprint(indents+1) for s in self.subsets])
-            msg += submsg
+
+        submsgs = ''.join([s.pprint() for s in self.subsets]).split('\n')
+        submsg = ''.join([f'    {s}\n' for s in submsgs if s])
+        msg += f'{submsg}'
         return msg
 
     def __repr__(self):
