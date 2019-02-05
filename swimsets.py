@@ -202,21 +202,27 @@ class SwimSet:
             f'L{i+1}:{d}@{self.print_dt(t)}' for i, (t, d)
             in enumerate(zip(self.total_time, self.total_distance))
         )
-        fs_str = f'\n            total - {totals} '
+
         if self.max_rounds > 1:
             per_round = ', '.join(
                 f'L{i+1}:{int(d/r)}@{self.print_dt(t/r)}' for i, (t, d, r)
                 in enumerate(zip(self.total_time, self.total_distance, self.rounds))
             )
-            fs_str += f'\n        per round - {per_round}'
+            fs_str = f'\ntotal     - {totals} '
+            fs_str += f'\nper round - {per_round}'
+        else:
+            fs_str = f'\ntotal - {totals} '
         return fs_str
 
-    def pprint(self):
+    def pprint(self, coach_view=False):
         msg = f'{self.rounds_str}{self.distance_str}'
         msg += f'{bool(self.stroke)*(" "+str(self.stroke)+" "*bool(self.msg))}{self.msg} '
-        msg += f'{self.round_edits}{self.full_stats_str}{self.time_str}\n'
+        msg += f'{self.round_edits}'
+        if coach_view:
+            msg += f'{self.full_stats_str}'
+        msg += f'{self.time_str}\n'
 
-        submsgs = ''.join([s.pprint() for s in self.subsets]).split('\n')
+        submsgs = ''.join([s.pprint(coach_view) for s in self.subsets]).split('\n')
         submsg = ''.join([f'    {s}\n' for s in submsgs if s])
         msg += f'{submsg}'
         return msg
@@ -239,3 +245,4 @@ if __name__ == '__main__':
         workout_dict = yaml.safe_load(f)
     workout = SwimSet.build_from_nested_dict(workout_dict, strokes_config=strokes)
     print(workout)
+    print(workout.pprint(coach_view=True))
