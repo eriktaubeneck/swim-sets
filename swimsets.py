@@ -4,35 +4,97 @@ from datetime import timedelta
 zero_seconds = timedelta(seconds=0)
 
 
+def build_timedelta(time):
+    mult = 1
+    if time.startswith('-'):
+        mult = -1
+        time = time[1:]
+    minutes, seconds = map(lambda t: int(t or 0), time.split(':'))
+    return mult * timedelta(minutes=minutes, seconds=seconds)
+
+
+def calc_set_time(
+        distance, base, additional_base, additional,
+        _round=5
+        ):
+    t = distance / 100 * (base + additional_base) + additional
+    if t.microseconds:
+        t += timedelta(seconds=1, microseconds=-t.microseconds)
+    t = t + timedelta(seconds=(- t.seconds % -_round))
+    return t
+
+
+class Stroke:
+    def __init__(
+            self,
+            name,
+            base_time_by_lane,
+            _round=5,
+    ):
+        self.name = name
+        self.base_times = [build_timedelta(t) for t in base_time_by_lane]
+        self._round = _round
+
+    def calc_time_by_lane(self, distance, additional_base, additional):
+        return [
+            calc_set_time(d, b, build_timedelta(ab), build_timedelta(a), self._round)
+            for d, b, ab, a
+            in zip(distance, self.base_times, additional_base, additional)
+        ]
+
+    def __repr__(self):
+        return self.name
+
+
 class SwimSet:
     def __init__(
             self,
             distance=0,
             distance_by_lanes=None,
+            stroke=None,
             msg='',
-            time='0:00',
+            time=None,
             time_by_lanes=None,
             rounds=1,
             rounds_by_lanes=None,
+            additional_base='0:00',
+            additional_base_by_lanes=None,
+            additional='0:00',
+            additional_by_lanes=None,
             lanes=4,
             subsets=None,
-            print_full_stats=False):
-        self.lanes = list(range(lanes))
-        if distance_by_lanes:
-            self.distance = distance_by_lanes
-        else:
-            self.distance = [distance for _ in self.lanes]
-        if time_by_lanes:
-            self.time = [self.init_time(t) for t in time_by_lanes]
-        else:
-            self.time = [self.init_time(time) for _ in self.lanes]
-        if rounds_by_lanes:
-            self.rounds = rounds_by_lanes
-        else:
-            self.rounds = [rounds for _ in self.lanes]
+            print_full_stats=False,
+    ):
+        self.stroke = stroke
         self.msg = msg
+        self.lanes = lanes
+        self.distance = self.init_by_lanes(distance, distance_by_lanes)
+        self.additional_base = self.init_by_lanes(
+            additional_base, additional_base_by_lanes
+        )
+        self.additional = self.init_by_lanes(
+            additional, additional_by_lanes
+        )
+        self.time = self.init_time(time, time_by_lanes)
+        self.rounds = self.init_by_lanes(rounds, rounds_by_lanes)
         self.subsets = subsets or []
         self.print_full_stats = print_full_stats
+
+    def init_by_lanes(self, var, var_by_lanes, fn=lambda x: x):
+        if var_by_lanes:
+            return [fn(v) for v in var_by_lanes]
+        return [fn(var) for _ in range(self.lanes)]
+
+    def init_time(self, time, time_by_lanes):
+        if time_by_lanes:
+            return [build_timedelta(t) for t in time_by_lanes]
+        elif time:
+            return [build_timedelta(time), ] * self.lanes
+        elif self.stroke:
+            return self.stroke.calc_time_by_lane(
+                self.distance, self.additional_base, self.additional
+            )
+        return [zero_seconds, ] * self.lanes
 
     @classmethod
     def build_from_nested_dict(cls, _dict):
@@ -41,11 +103,6 @@ class SwimSet:
             for s in _dict.get('subsets', [])
         ]
         return cls(**_dict)
-
-    @staticmethod
-    def init_time(time):
-        minutes, seconds = map(lambda t: int(t or 0), time.split(':'))
-        return timedelta(minutes=minutes, seconds=seconds)
 
     @property
     def is_superset(self):
@@ -66,9 +123,9 @@ class SwimSet:
     @property
     def total_time(self):
         if self.max_time != zero_seconds or not self.is_superset:
-            return [self.time[l] * self.rounds[l] for l in self.lanes]
+            return [t*r for t, r in zip(self.time, self.rounds)]
         return [self.rounds[l] * sum((s.total_time[l] for s in self.subsets), zero_seconds)
-                for l in self.lanes]
+                for l in range(self.lanes)]
 
     @staticmethod
     def print_dt(dt):
@@ -84,9 +141,9 @@ class SwimSet:
     @property
     def total_distance(self):
         if not self.is_superset:
-            return [self.distance[l] * self.rounds[l] for l in self.lanes]
+            return [d*r for d, r in zip(self.distance,  self.rounds)]
         return [self.rounds[l] * sum(s.total_distance[l] for s in self.subsets)
-                for l in self.lanes]
+                for l in range(self.lanes)]
 
     @property
     def rounds_str(self):
@@ -152,7 +209,8 @@ class SwimSet:
 
     def pprint(self):
         msg = f'{self.rounds_str}{self.distance_str}'
-        msg += f'{self.msg} {self.round_edits}{self.full_stats_str}{self.time_str}\n'
+        msg += f'{bool(self.stroke)*(" "+str(self.stroke)+" "*bool(self.msg))}{self.msg} '
+        msg += f'{self.round_edits}{self.full_stats_str}{self.time_str}\n'
 
         submsgs = ''.join([s.pprint() for s in self.subsets]).split('\n')
         submsg = ''.join([f'    {s}\n' for s in submsgs if s])
