@@ -34,6 +34,14 @@ class SwimSet:
         self.subsets = subsets or []
         self.print_full_stats = print_full_stats
 
+    @classmethod
+    def build_from_nested_dict(cls, _dict):
+        _dict['subsets'] = [
+            cls.build_from_nested_dict(s)
+            for s in _dict.get('subsets', [])
+        ]
+        return cls(**_dict)
+
     @staticmethod
     def init_time(time):
         minutes, seconds = map(lambda t: int(t or 0), time.split(':'))
