@@ -1,4 +1,5 @@
 from datetime import timedelta
+import yaml
 
 
 zero_seconds = timedelta(seconds=0)
@@ -28,11 +29,11 @@ class Stroke:
     def __init__(
             self,
             name,
-            base_time_by_lane,
+            base_times,
             _round=5,
     ):
         self.name = name
-        self.base_times = [build_timedelta(t) for t in base_time_by_lane]
+        self.base_times = [build_timedelta(t) for t in base_times]
         self._round = _round
 
     def calc_time_by_lane(self, distance, additional_base, additional):
@@ -97,9 +98,12 @@ class SwimSet:
         return [zero_seconds, ] * self.lanes
 
     @classmethod
-    def build_from_nested_dict(cls, _dict):
+    def build_from_nested_dict(cls, _dict, strokes_config=None):
+        if 'stroke_str' in _dict:
+            _dict['stroke'] = strokes_config[_dict['stroke_str']]
+            del _dict['stroke_str']
         _dict['subsets'] = [
-            cls.build_from_nested_dict(s)
+            cls.build_from_nested_dict(s, strokes_config)
             for s in _dict.get('subsets', [])
         ]
         return cls(**_dict)
@@ -219,3 +223,19 @@ class SwimSet:
 
     def __repr__(self):
         return self.pprint()
+
+
+if __name__ == '__main__':
+    strokes_yaml = 'strokes.yaml'
+    with open(strokes_yaml, 'r') as f:
+        strokes_dict = yaml.safe_load(f)
+
+    strokes = {
+        k: Stroke(**v) for k, v in strokes_dict.items()
+    }
+
+    workout_yaml = 'example-workout.yaml'
+    with open(workout_yaml, 'r') as f:
+        workout_dict = yaml.safe_load(f)
+    workout = SwimSet.build_from_nested_dict(workout_dict, strokes_config=strokes)
+    print(workout)
