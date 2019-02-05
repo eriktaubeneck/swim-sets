@@ -1,0 +1,62 @@
+msg: 'TNYA - LIU - Mon 2019-02-11'
+print_full_stats: True
+subsets:
+  - msg: 'Warmup'
+    time: '10:00'
+    print_full_stats: True
+    subsets:
+      - distance: 250
+        stroke_str: free
+        time: '0:00'
+      - distance: 100
+        stroke_str: im
+        time: '0:00'
+      - distance: 150
+        stroke_str: free
+        msg: 'Pull'
+        time: '0:00'
+      - distance: 100
+        stroke_str: kick
+        time: '0:00'
+  - msg: 'Preset'
+    print_full_stats: True
+    subsets:
+      - distance: 50
+        stroke_str: choice
+        msg: 'Drill/Swim'
+        additional: ':10'
+        rounds: 6
+      - distance: 25
+        stroke_str: stroke
+        msg: 'Build'
+        additional: ':10'
+        rounds: 6
+      - distance: 50
+        stroke_str: kick
+        rounds: 4
+      - distance: 50
+        stroke_str: free
+        msg: 'Desc'
+        additional: ':10'
+        rounds: 3
+      - distance_by_lanes: [200, 200, 200, 100]
+        stroke_str: im
+        rounds: 1
+  - msg: 'Main Set'
+    rounds_by_lanes: [1, 1, 1, 2]
+    print_full_stats: True
+    subsets:
+      - distance_by_lanes: [250, 250, 250, 150]
+        stroke_str: free
+        additional: ':10'
+      - distance_by_lanes: [350, 350, 350, 250]
+        stroke_str: free
+        additional: ':10'
+      - distance_by_lanes: [450, 450, 450, 350]
+        stroke_str: free
+        additional: ':10'
+      - distance: 50
+        stroke_str: ez
+      - distance_by_lanes: [200, 200, 200, 0]
+        stroke_str: im
+        rounds_by_lanes: [3, 2, 1, 0]
