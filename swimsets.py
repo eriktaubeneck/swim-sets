@@ -95,6 +95,16 @@ class SwimSet:
         return f'{self.max_rounds}x '
 
     @property
+    def round_edits(self):
+        if len(set(self.rounds)) == 1 or self.max_time:
+            return ''
+        return '(' + ', '.join(
+            f'L{i+1}: {r}x'
+            for i, r in enumerate(self.rounds)
+            if r != self.max_rounds
+        ) + ')'
+
+    @property
     def distance_str(self):
         if not self.max_distance:
             return ''
@@ -131,7 +141,7 @@ class SwimSet:
             f'L{i+1}:{d}@{self.print_dt(t)}' for i, (t, d)
             in enumerate(zip(self.total_time, self.total_distance))
         )
-        fs_str = f'\n        total     - {totals} '
+        fs_str = f'\n            total - {totals} '
         if self.max_rounds > 1:
             per_round = ', '.join(
                 f'L{i+1}:{int(d/r)}@{self.print_dt(t/r)}' for i, (t, d, r)
@@ -142,7 +152,7 @@ class SwimSet:
 
     def pprint(self):
         msg = f'{self.rounds_str}{self.distance_str}'
-        msg += f'{self.msg} {self.full_stats_str}{self.time_str}\n'
+        msg += f'{self.msg} {self.round_edits}{self.full_stats_str}{self.time_str}\n'
 
         submsgs = ''.join([s.pprint() for s in self.subsets]).split('\n')
         submsg = ''.join([f'    {s}\n' for s in submsgs if s])
