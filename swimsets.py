@@ -131,11 +131,13 @@ class SwimSet:
             f'L{i+1}:{d}@{self.print_dt(t)}' for i, (t, d)
             in enumerate(zip(self.total_time, self.total_distance))
         )
-        fs_str = f'\n        total - {totals} '
+        fs_str = f'\n        total     - {totals} '
         if self.max_rounds > 1:
-            per_round = [self.print_dt(self.total_time[l]/self.rounds[l])
-                         for l in self.lanes]
-            fs_str += f'\n        per round:  {per_round}, '
+            per_round = ', '.join(
+                f'L{i+1}:{int(d/r)}@{self.print_dt(t/r)}' for i, (t, d, r)
+                in enumerate(zip(self.total_time, self.total_distance, self.rounds))
+            )
+            fs_str += f'\n        per round - {per_round}'
         return fs_str
 
     def pprint(self):

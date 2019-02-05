@@ -52,7 +52,7 @@ preset = dict(
 
 mainset = dict(
     msg='Main Set',
-    rounds=1,
+    rounds=2,
     subsets=[
         dict(
             distance_by_lanes=[250, 250, 250, 150],
