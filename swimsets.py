@@ -52,8 +52,20 @@ class SwimSet:
         return bool(self.subsets)
 
     @property
+    def max_distance(self):
+        return max(self.distance)
+
+    @property
+    def max_rounds(self):
+        return max(self.rounds)
+
+    @property
+    def max_time(self):
+        return max(self.time)
+
+    @property
     def total_time(self):
-        if max(self.time) != zero_seconds or not self.is_superset:
+        if self.max_time != zero_seconds or not self.is_superset:
             return [self.time[l] * self.rounds[l] for l in self.lanes]
         return [self.rounds[l] * sum((s.total_time[l] for s in self.subsets), zero_seconds)
                 for l in self.lanes]
@@ -78,60 +90,53 @@ class SwimSet:
 
     @property
     def rounds_str(self):
-        if not max(self.rounds) > 1:
+        if self.max_rounds == 1:
             return ''
-        return f'{max(self.rounds)}x '
+        return f'{self.max_rounds}x '
 
     @property
     def distance_str(self):
-        if not max(self.distance):
+        if not self.max_distance:
             return ''
-        return f'{max(self.distance)} '
+        return f'{self.max_distance} '
 
     @property
     def time_str(self):
-        if not max(self.time):
+        if not self.max_time:
             return ''
-        max_dist = max(self.distance)
-        dist = [f'{d}' if d != max_dist else '' for d in self.distance]
-        max_rounds = max(self.rounds)
-        rnds = [f'{r}' if r != max_rounds else '' for r in self.rounds]
+        dist = [f'{d}' if d != self.max_distance else '' for d in self.distance]
+        rnds = [f'{r}' if r != self.max_rounds else '' for r in self.rounds]
 
         dist_rnds = []
         for d, r in zip(dist, rnds):
-            if d and r:
-                if d == '0' or r == '0':
-                    dist_rnds.append('')
-                else:
-                    dist_rnds.append(f'({r}x, {d})')
-            elif d:
-                dist_rnds.append(f'({d})')
+            if d and r and not (d == '0' or r == '0'):
+                dist_rnds.append(f'({r}x, {d})')
             elif r:
                 dist_rnds.append(f'({r}x)')
+            elif d:
+                dist_rnds.append(f'({d})')
             else:
                 dist_rnds.append('')
 
-        tm_str = [self.print_dt(t) + dr for t, dr in zip(self.time, dist_rnds)]
-
-        return f'\n    @ {"  ".join(tm_str)} '
+        tm_str = "  ".join(
+            [self.print_dt(t) + dr for t, dr in zip(self.time, dist_rnds)]
+        )
+        return f'\n    @ {tm_str} '
 
     @property
     def full_stats_str(self):
         if not self.print_full_stats:
             return ''
-        total_times = '[' + ', '.join([self.print_dt(t) for t in self.total_time]) + ']'
-        if max(self.rounds) > 1:
-            per_round = [self.print_dt(self.total_time[l]/self.rounds[l]) for l in self.lanes]
-            return (
-                f'\n        (total time: {total_times}, '
-                f'\n         per round:  {per_round}, '
-                f'\n         total dist: {self.total_distance}'
-            )
-        else:
-            return (
-                f'\n        (total time: {total_times} '
-                f'\n         total dist: {self.total_distance}) '
-            )
+        totals = ', '.join(
+            f'L{i+1}:{d}@{self.print_dt(t)}' for i, (t, d)
+            in enumerate(zip(self.total_time, self.total_distance))
+        )
+        fs_str = f'\n        total - {totals} '
+        if self.max_rounds > 1:
+            per_round = [self.print_dt(self.total_time[l]/self.rounds[l])
+                         for l in self.lanes]
+            fs_str += f'\n        per round:  {per_round}, '
+        return fs_str
 
     def pprint(self):
         msg = f'{self.rounds_str}{self.distance_str}'
