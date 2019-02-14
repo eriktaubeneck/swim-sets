@@ -1,62 +1,69 @@
-msg: 'TNYA - LIU - Mon 2019-02-11'
+msg: TNYA - LIU - Mon 2019-02-11
 print_full_stats: True
 subsets:
-  - msg: 'Warmup'
+  - msg: Warmup
     time: '10:00'
     print_full_stats: True
     subsets:
-      - distance: 250
+      - distance: 300
         stroke_str: free
-        time: '0:00'
+        time: :00
       - distance: 100
         stroke_str: im
-        time: '0:00'
-      - distance: 150
+        time: :00
+      - distance: 200
         stroke_str: free
-        msg: 'Pull'
-        time: '0:00'
-      - distance: 100
-        stroke_str: kick
-        time: '0:00'
-  - msg: 'Preset'
+        msg: Pull
+        time: :00
+  - msg: Preset
     print_full_stats: True
     subsets:
       - distance: 50
-        stroke_str: choice
-        msg: 'Drill/Swim'
-        additional: ':10'
-        rounds: 6
-      - distance: 25
         stroke_str: stroke
-        msg: 'Build'
-        additional: ':10'
-        rounds: 6
-      - distance: 50
-        stroke_str: kick
+        msg: (Fly / IM Order)
+        additional: :05
         rounds: 4
       - distance: 50
-        stroke_str: free
-        msg: 'Desc'
-        additional: ':10'
-        rounds: 3
-      - distance_by_lanes: [200, 200, 200, 100]
-        stroke_str: im
-        rounds: 1
-  - msg: 'Main Set'
-    rounds_by_lanes: [1, 1, 1, 2]
+        stroke_str: stroke
+        msg: (Back / IM Order)
+        additional: :05
+        rounds: 4
+      - distance: 50
+        stroke_str: stroke
+        msg: (Breast / IM Order)
+        additional: :05
+        rounds: 4
+      - distance: 50
+        stroke_str: stroke
+        msg: (Free / IM Order)
+        additional: :05
+        rounds: 4
+  - msg: Main Set
     print_full_stats: True
+    rounds: 2
     subsets:
-      - distance_by_lanes: [250, 250, 250, 150]
+      - distance_by_lanes: [75, 75, 50, 50]
         stroke_str: free
-        additional: ':10'
-      - distance_by_lanes: [350, 350, 350, 250]
-        stroke_str: free
-        additional: ':10'
-      - distance_by_lanes: [450, 450, 450, 350]
-        stroke_str: free
-        additional: ':10'
+        additional: :10
+        rounds_by_lanes: [4, 4, 4, 2]
+      - distance: 50
+        stroke_str: kick
+        msg: (Breaststroke)
+        rounds: 2
+      - distance: 50
+        stroke_str: stroke
+        msg: (Breaststroke Pull)
+        additional: :15
+        rounds: 2
+      - distance: 50
+        stroke_str: stroke
+        msg: (Breaststroke, 1 pull 2 kick)
+        additional: :10
+        rounds: 2
+      - distance: 50
+        stroke_str: stroke
+        msg: (Breaststroke)
+        additional: :05
+        rounds_by_lanes: [4, 2, 2, 2]
       - distance: 50
         stroke_str: ez
-      - distance_by_lanes: [200, 200, 200, 0]
-        stroke_str: im
-        rounds_by_lanes: [3, 2, 1, 0]

@@ -8,7 +8,7 @@ choice:
   name: 'Choice'
   base_times: ['1:30', '1:40', '1:50', '2:00']
 im:
-  name: 'Choice'
+  name: 'IM'
   base_times: ['1:35', '1:45', '2:00', '2:10']
 kick:
   name: 'Kick'
