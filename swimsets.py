@@ -1,11 +1,9 @@
-from typing import cast, List, Dict, Optional, Any, Callable, TypeVar
+from typing import cast, List, Dict, Optional, Any, Callable
 from datetime import timedelta
 import yaml
 
 
 zero_seconds: timedelta = timedelta(seconds=0)
-
-T = TypeVar('T')
 
 
 def build_timedelta(time: str) -> timedelta:
@@ -96,8 +94,8 @@ class SwimSet:
             self,
             var: Optional[Any],
             var_by_lanes: Optional[List[Any]],
-            fn: Callable[[Any], T] = lambda x: x
-    ) -> List[T]:
+            fn: Callable[[Any], Any] = lambda x: x
+    ) -> List[Any]:
         if var_by_lanes:
             return [fn(v) for v in var_by_lanes]
         return [fn(var) for _ in range(self.lanes)]
