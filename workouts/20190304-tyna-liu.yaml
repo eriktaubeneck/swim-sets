@@ -1,0 +1,81 @@
+msg: TNYA - LIU - Mon 2019-02-25
+print_full_stats: True
+subsets:
+  - msg: Warmup
+    time: '15:00'
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        stroke_str: free
+        time: :00
+      - distance: 200
+        stroke_str: im
+        msg: drill / swim
+        time: :00
+      - distance: 200
+        stroke_str: free
+        msg: pull
+        time: :00
+      - distance: 100
+        stroke_str: kick
+        time: :00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 3
+    subsets:
+      - distance: 50
+        stroke_str: kick
+        additional: 0:10
+      - distance: 75
+        stroke_str: choice
+        msg: 'Choice: Drill / DPS / Build'
+        additional: 0:10
+      - distance: 25
+        msg: Scull
+        time_by_lanes: ['0:30', '0:30', '0:35', '0:40']
+      - distance: 50
+        stroke_str: choice
+        additional: 0:10
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 400
+        stroke_str: free
+        rounds: 1
+        time_by_lanes: ['5:40', '6:20', '7:00', '0:00']
+
+      - distance: 50
+        stroke_str: ez
+
+      - distance: 200
+        stroke_str: free
+        rounds: 2
+        additional_base: '0:05'
+
+      - distance: 50
+        stroke_str: ez
+
+      - distance: 100
+        stroke_str: free
+        rounds: 4
+        additional_base: '0:05'
+
+      - distance: 50
+        stroke_str: ez
+
+      - distance: 50
+        stroke_str: free
+        rounds_by_lanes: [8, 6, 4, 4]
+        additional_base: '0:05'
+
+  - msg: Post Set (if time permits)
+    print_full_stats: True
+    subsets:
+      - distance: 75
+        rounds: 4
+        stroke_str: free
+        msg: Breathe every 3, 5, 7 strokes, by 25
+        additional: 0:30
