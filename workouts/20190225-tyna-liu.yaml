@@ -1,0 +1,56 @@
+msg: TNYA - LIU - Mon 2019-02-25
+print_full_stats: True
+subsets:
+  - msg: Warmup
+    time: '15:00'
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        stroke_str: free
+        time: :00
+      - distance: 200
+        stroke_str: im
+        msg: drill / swim
+        time: :00
+      - distance: 50
+        rounds: 4
+        stroke_str: free
+        additional: :10
+        msg: DPS / build
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        stroke_str: free
+        rounds: 4
+        time: '1:40'
+      - msg: Rest
+        time: '1:20'
+      - distance: 100
+        stroke_str: free
+        rounds: 4
+        time: '1:35'
+      - msg: Rest
+        time: '1:40'
+      - distance: 100
+        stroke_str: free
+        rounds: 4
+        time: '1:25'
+      - msg: Rest
+        time: '1:20'
+      - distance: 100
+        stroke_str: free
+        rounds: 4
+        time: '1:20'
+      - msg: Rest
+        time: '1:40'
+      - distance: 100
+        stroke_str: free
+        rounds: 4
+        time: '1:15'
+      - msg: Rest
+        time: '2:00'
+      - distance: 100
+        stroke_str: free
+        rounds: 4
+        time: '1:10'
