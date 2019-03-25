@@ -1,4 +1,4 @@
-from typing import cast, List, Dict, Optional, Any, Callable
+from typing import cast, List, Dict, Optional, Any, Callable, Union
 from datetime import timedelta
 import yaml
 
@@ -59,18 +59,13 @@ class Stroke:
 class SwimSet:
     def __init__(
             self,
-            distance: int = 0,
-            distance_by_lanes: Optional[List[int]] = None,
+            distance: Union[List[int], int] = 0,
             stroke: Optional[Stroke] = None,
             msg: str = '',
-            time: Optional[str] = None,
-            time_by_lanes: Optional[List[str]] = None,
-            rounds: int = 1,
-            rounds_by_lanes: Optional[List[int]] = None,
-            additional_base: str = '0:00',
-            additional_base_by_lanes: Optional[List[str]] = None,
-            additional: str = '0:00',
-            additional_by_lanes: Optional[List[str]] = None,
+            time: Optional[Union[List[str], str]] = None,
+            rounds: Union[List[int], int] = 1,
+            additional_base: Union[List[str], str] = '0:00',
+            additional: Union[List[str], str] = '0:00',
             lanes: int = 4,
             subsets: Optional[List['SwimSet']] = None,
             print_full_stats: bool = False,
@@ -78,37 +73,36 @@ class SwimSet:
         self.stroke: Optional[Stroke] = stroke
         self.msg: str = msg
         self.lanes: int = lanes
-        self.distance: List[int] = self.init_by_lanes(distance, distance_by_lanes)
+        self.distance: List[int] = self.init_by_lanes(distance)
         self.additional_base: List[timedelta] = self.init_by_lanes(
-            additional_base, additional_base_by_lanes, build_timedelta
+            additional_base, build_timedelta
         )
         self.additional: List[timedelta] = self.init_by_lanes(
-            additional, additional_by_lanes, build_timedelta
+            additional, build_timedelta
         )
-        self.time: List[timedelta] = self.init_time(time, time_by_lanes)
-        self.rounds: List[int] = self.init_by_lanes(rounds, rounds_by_lanes)
+        self.time: List[timedelta] = self.init_time(time)
+        self.rounds: List[int] = self.init_by_lanes(rounds)
         self.subsets: List[SwimSet] = subsets or []
         self.print_full_stats: bool = print_full_stats
 
     def init_by_lanes(
             self,
-            var: Optional[Any],
-            var_by_lanes: Optional[List[Any]],
+            var: Optional[Union[List[Any], Any]],
             fn: Callable[[Any], Any] = lambda x: x
     ) -> List[Any]:
-        if var_by_lanes:
-            return [fn(v) for v in var_by_lanes]
+        if isinstance(var, list):
+            return [fn(v) for v in var]
         return [fn(var) for _ in range(self.lanes)]
 
     def init_time(
             self,
-            time: Optional[str],
-            time_by_lanes: Optional[List[str]],
+            time: Optional[Union[List[str], str]] = None,
     ) -> List[timedelta]:
-        if time_by_lanes:
-            return [build_timedelta(t) for t in time_by_lanes]
-        elif time:
-            return [build_timedelta(time), ] * self.lanes
+        if time:
+            if isinstance(time, list):
+                return [build_timedelta(t) for t in time]
+            else:
+                return [build_timedelta(time), ] * self.lanes
         elif self.stroke:
             return self.stroke.calc_time_by_lane(
                 self.distance, self.additional_base, self.additional
@@ -123,9 +117,8 @@ class SwimSet:
     ):
         if not strokes_config:
             strokes_config = {}
-        if 'stroke_str' in _dict:
-            _dict['stroke'] = strokes_config[_dict['stroke_str']]
-            del _dict['stroke_str']
+        if 'stroke' in _dict:
+            _dict['stroke'] = strokes_config[_dict['stroke']]
         _dict['subsets'] = [
             cls.build_from_nested_dict(s, strokes_config)
             for s in _dict.get('subsets', [])

@@ -1,4 +1,4 @@
-msg: TNYA - LIU - Mon 2019-03-18
+msg: TNYA - LIU - Mon 2019-03-25
 print_full_stats: True
 subsets:
   - msg: Warmup
@@ -11,7 +11,7 @@ subsets:
       - distance: 100
         stroke: im
         time: :00
-      - distance: 100
+      - distance: 200
         stroke: free
         msg: pull
         time: :00
@@ -21,46 +21,63 @@ subsets:
 
   - msg: Preset
     print_full_stats: True
-    rounds: 2
+    rounds: 3
     subsets:
-      - distance: 100
+      - distance: 50
         stroke: kick
-        msg: fins, no board, focus on tight streamline
       - distance: 50
         stroke: free
-        rounds: 3
-        msg: descend
+        msg: drill
         additional: '0:10'
       - distance: 50
         stroke: choice
-        additional: '0:10'
+        msg: drill
+        additional: '0:15'
 
 
   - msg: Main Set
     print_full_stats: True
-    rounds: 2
+    rounds: 1
     subsets:
-      - distance: [200, 200, 150, 150]
-        stroke: free
-        msg: pull (paddles optional)
+      - distance: 100
+        stroke: im
         rounds: 1
         additional: '0:10'
 
-      - distance: 75
+      - distance: [400, 400, 300, 200]
         stroke: free
-        rounds: 3
-        msg: 'fins. #1: 70% effort, 5m streamline | #2: 80%, 8m | #3: 90%, 10+m'
-
-      - distance: 75
-        stroke: ez
-
-      - distance: 100
-        stroke: im
-        rounds: [3, 2, 1, 1]
-        additional: '0:10'
+        rounds: 1
+        additional: '0:15'
 
       - distance: 50
         stroke: ez
+
+      - distance: 200
+        stroke: im
+        rounds: 1
+        additional: '0:10'
+
+      - distance: 200
+        stroke: free
+        rounds: 1
+        additional: '0:15'
+
+      - distance: 50
+        stroke: ez
+
+      - distance: [400, 400, 300, 200]
+        stroke: im
+        rounds: 1
+        additional: '0:10'
+
+      - distance: 100
+        stroke: free
+        rounds: 1
+        additional: '0:15'
+
+      - distance: 50
+        stroke: ez
+
 
 
   - msg: Post Set (if time permits)
