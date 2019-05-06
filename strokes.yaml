@@ -1,18 +1,18 @@
 free:
   name: 'Free'
-  base_times: ['1:20', '1:30', '1:40', '1:50']
+  base_times: ['1:20', '1:30', '1:40', '2:00']
 stroke:
   name: 'Stroke'
-  base_times: ['1:35', '1:45', '1:55', '2:10']
+  base_times: ['1:35', '1:45', '1:55', '2:20']
 choice:
   name: 'Choice'
-  base_times: ['1:30', '1:40', '1:50', '2:00']
+  base_times: ['1:30', '1:40', '1:50', '2:20']
 im:
   name: 'IM'
-  base_times: ['1:40', '1:50', '2:05', '2:15']
+  base_times: ['1:40', '1:50', '2:10', '2:30']
 kick:
   name: 'Kick'
-  base_times: ['2:00', '2:10', '2:30', '2:40']
+  base_times: ['2:00', '2:10', '2:30', '2:50']
 ez:
   name: 'EZ'
   base_times: ['2:30', '3:00', '3:30', '4:00']
