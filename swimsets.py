@@ -1,6 +1,6 @@
 from typing import cast, List, Dict, Optional, Any, Callable, Union
 from datetime import timedelta
-import yaml
+from ruamel import yaml
 
 
 zero_seconds: timedelta = timedelta(seconds=0)
@@ -22,6 +22,8 @@ def calc_set_time(
         additional: timedelta,
         _round: int = 5,
 ) -> timedelta:
+    if distance == 0:
+        return timedelta(0.0)
     t = distance / 100 * (base + additional_base) + additional
     if t.microseconds:
         t += timedelta(seconds=1, microseconds=-t.microseconds)
@@ -258,7 +260,7 @@ class SwimSet:
         return self.pprint()
 
 
-if __name__ == '__main__':
+def main():
     strokes_yaml: str = 'strokes.yaml'
     with open(strokes_yaml, 'r') as f:
         strokes_dict: Dict[Any, Any] = yaml.safe_load(f)
@@ -276,3 +278,6 @@ if __name__ == '__main__':
     )
     print(workout)
     print(workout.pprint(coach_view=True))
+
+if __name__ == '__main__':
+    main()

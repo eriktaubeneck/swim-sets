@@ -1,0 +1,83 @@
+msg: TNYA - LIU - Mon 2019-04-22
+print_full_stats: True
+subsets:
+  - msg: Warmup
+    time: '15:00'
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        stroke: free
+        time: :00
+      - distance: 100
+        stroke: kick
+        time: :00
+      - distance: 50
+        rounds: 4
+        stroke: choice
+        msg: drill
+        time: :00
+      - distance: 200
+        stroke: free
+        msg: pull
+
+  - msg: Preset
+    print_full_stats: True
+    subsets:
+      - rounds: 8
+        distance: 100
+        stroke: free
+        additional: 0:05
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 400
+        stroke: free
+        additional: 0:30
+
+      - distance: 125
+        rounds: 4
+        stroke: free
+        additional: 0:05
+
+      - distance: 75
+        rounds: 2
+        stroke: choice
+        msg: non-free, IM optional
+        additional: 0:15
+
+      - distance: 100
+        stroke: free
+        msg: recovery
+        additional: :30
+
+      - distance: [300, 200, 0, 0]
+        stroke: free
+        additional: 0:30
+
+      - distance: [75, 75, 75, 0]
+        rounds: [4, 2, 2, 0]
+        stroke: free
+        additional: 0:05
+
+      - distance: [50, 50, 50, 0]
+        rounds: [2, 2, 2, 0]
+        stroke: choice
+        msg: non-free
+        additional: 0:15
+
+  - msg: Post Set (if time permits)
+    print_full_stats: True
+    rounds: 2
+    subsets:
+      - distance: 25
+        msg: double arm backstroke
+        time: 0:00
+      - distance: 25
+        msg: scull
+        time: 0:00
+      - distance: 50
+        stroke: free
+        msg: perfect form
+        time: 0:00
