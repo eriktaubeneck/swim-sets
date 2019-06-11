@@ -1,0 +1,123 @@
+msg: TNYA - LIU - Mon 2019-06-03
+print_full_stats: True
+subsets:
+  - msg: Warmup
+    time: '15:00'
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        stroke: free
+        time: :00
+      - distance: 100
+        stroke: im
+        time: :00
+      - distance: 200
+        stroke: free
+        msg: pull
+        time: :00
+      - distance: 200
+        stroke: kick
+        time: :00
+
+  - msg: Preset
+    print_full_stats: True
+    subsets:
+      - distance: 50
+        stroke: choice
+        msg: 'Drill/Swim'
+        additional: ':10'
+        rounds: 4
+      - distance: 25
+        stroke: stroke
+        msg: 'Build'
+        additional: ':10'
+        rounds: 4
+      - distance: 50
+        stroke: kick
+        rounds: 4
+      - distance: 50
+        stroke: free
+        msg: 'Desc'
+        additional: ':10'
+        rounds: 3
+      - distance: [200, 200, 200, 100]
+        stroke: im
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 50
+        stroke: free
+        additional_base: 0:10
+      - distance: 25
+        stroke: stroke
+        msg: sprint
+        rounds: 2
+      - distance: 25
+        stroke: ez
+      - distance: 50
+        stroke: free
+        msg: sprint
+      - distance: 50
+        stroke: free
+        additional_base: 0:10
+
+      - distance: 100
+        stroke: free
+        additional_base: 0:10
+      - distance: 25
+        stroke: stroke
+        msg: sprint
+        rounds: 2
+      - distance: 25
+        stroke: ez
+      - distance: 50
+        stroke: free
+        msg: sprint
+      - distance: 100
+        stroke: free
+        additional_base: 0:10
+
+      - distance: [150,150,150,0]
+        stroke: free
+        additional_base: 0:10
+      - distance: [25, 25, 25, 0]
+        stroke: stroke
+        msg: sprint
+        rounds: 2
+      - distance: [25, 25, 25, 0]
+        stroke: ez
+      - distance: [50, 50, 50, 0]
+        stroke: free
+        msg: sprint
+      - distance: [150,150,150,0]
+        stroke: free
+        additional_base: 0:10
+
+      - distance: [200, 0, 0, 0]
+        stroke: free
+        additional_base: 0:10
+      - distance: [25, 25, 0, 0]
+        stroke: stroke
+        msg: sprint
+        rounds: 2
+      - distance: [25, 0, 0, 0]
+        stroke: ez
+      - distance: [50, 0, 0, 0]
+        stroke: free
+        msg: sprint
+      - distance: [200, 0, 0, 0]
+        stroke: free
+        additional_base: 0:10
+
+
+
+  - msg: Post Set (if time permits)
+    print_full_stats: True
+    subsets:
+      - distance: 75
+        msg: breath 3, 5, 7
+        stroke: free
+        rounds: 6
+        additional: 0:15
