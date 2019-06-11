@@ -1,84 +1,26 @@
-msg: TNYA - LIU - Mon 2019-06-10
+msg: Today's Practice
 print_full_stats: True
 subsets:
-  - msg: Warmup
-    time: 15:00
-    print_full_stats: True
-    subsets:
-      - distance: 200
-        stroke: free
-        time: :00
-      - distance: 100
-        stroke: im
-        time: :00
-      - distance: 200
-        stroke: free
-        msg: pull
-        time: :00
-      - distance: 200
-        stroke: kick
-        time: :00
-
-  - msg: Preset
-    print_full_stats: True
-    subsets:
-      - distance: 100
-        stroke: free
-        additional: 0:05
-        rounds: [9, 8, 6, 5]
-
   - msg: Main Set
     print_full_stats: True
+    rounds: 5
     subsets:
-      - distance: 50
-        stroke: kick
-        additional: 0:10
-        rounds: 2
+      - distance: 150
+        rounds: [5, 5, 5, 4]
+        stroke: free
+        additional_base: -0:05
+      - distance: 100
+        rounds: 4
+        stroke: im
+        additional_base: 0:10
+        time: :00
       - distance: 75
         stroke: free
-        msg: kick/drill/swim by 25
-        rounds: 2
-        additional: 0:30
-      - distance: 50
-        stroke: free
-        msg: desc
-        additional: 0:05
-        rounds: [4, 4, 4, 2]
-      - distance: 50
+        msg: pull
+        rounds: 3
+      - distance: 25
         stroke: ez
-      - distance: 50
-        stroke: free
-        msg: race sprint
-      - msg: rest
-        time: 0:30
-
-      - distance: 50
+      - distance:  [100, 100, 50, 50]
         stroke: kick
-        additional: 0:10
-        rounds: 2
-      - distance: 75
-        stroke: stroke
-        msg: kick/drill/swim by 25
-        rounds: 2
-        additional: 0:30
-      - distance: 50
-        stroke: stroke
-        msg: desc
         additional: 0:15
-        rounds: [4, 4, 4, 2]
-      - distance: 50
-        stroke: ez
-      - distance: 50
-        stroke: stroke
-        msg: race sprint
-
-
-  - msg: Post Set (if time permits)
-    print_full_stats: True
-    time: 5:00
-    subsets:
-      - distance: 50
-        msg: scull down, double arm backstroke back, 15 sec rest
-        stroke: free
-        rounds: 6
-        time: 0:00
+        rounds: 2
