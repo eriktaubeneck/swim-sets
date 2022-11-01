@@ -1,0 +1,49 @@
+msg: Tuesday, Oct 18th 2022 - Mid Distance
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 18:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 100
+        stroke: kick
+        time: 0:00
+      - distance: 200
+        stroke: free
+        msg: pull
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 3
+    subsets:
+      - distance: 50
+        stroke: free
+        additional: 0:10
+        msg: catch up drill
+      - distance: 50
+        stroke: free
+        additional: 0:10
+        msg: 10 yards underwater
+      - distance: 50
+        stroke: free
+        additional: 0:10
+        msg: build
+      - distance: 100
+        stroke: free
+        additional: 0:10
+        msg: pull
+
+
+  - msg: Main Set
+    print_full_stats: True
+    distance: [200, 200, 200, 150]
+    rounds: [8, 8, 6, 6]
+    stroke: free
+    additional_base: 0:05
