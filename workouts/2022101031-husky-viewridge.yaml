@@ -1,0 +1,48 @@
+msg: Tuesday, Oct 31st 2022 - Mid Distance
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 12:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        stroke: kick
+        additional: 0:10
+      - distance: 50
+        stroke: free
+        additional: 0:10
+        msg: build
+        rounds: 4
+      - distance: 100
+        stroke: ez
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        rounds: [10, 8, 7, 5]
+        stroke: free
+        additional_base: 0:05
+      - distance: 100
+        stroke: ez
+        time: [3:00, 3:00, 3:00, 3:00]
+      - distance: 100
+        stroke: free
+        rounds: [10, 8, 7, 5]
+        additional_base: 0:10
+      - distance: 100
+        stroke: ez
