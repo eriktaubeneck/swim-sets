@@ -1,0 +1,51 @@
+msg: Monday, Nov 21st 2022 - Mid Distance
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: [10:00, 12:00, 14:00, 14:00]
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Preset (IM Order By Round)
+    print_full_stats: True
+    rounds: 4
+    subsets:
+      - distance: 25
+        rounds: 2
+        stroke: kick
+        msg: under water
+        additional: [0:05, 0:10, 0:10, 0:10]
+      - distance: 50
+        stroke: im
+        msg: drill
+        additional: 0:10
+      - distance: 50
+        rounds: 3
+        msg: descend
+        stroke: im
+
+  - msg: Main Set
+    print_full_stats: True
+    rounds: [3, 2, 1, 1]
+    subsets:
+      - distance: 100
+        stroke: free
+      - distance: 100
+        stroke: im
+        additional_base: [-0:05, -0:05, 0:00, 0:00]
+      - distance: 200
+        stroke: free
+      - distance: 200
+        stroke: im
+        additional_base: [-0:05, -0:05, 0:00, 0:00]
+      - distance: 50
+        stroke: ez
