@@ -1,0 +1,52 @@
+msg: Monday, Feb 14th 2023 - Breaststroke
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: [400, 300, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: [200, 100, 100, 100]
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: [4, 4, 3, 3]
+    subsets:
+      - distance: 50
+        stroke: kick
+      - distance: 25
+        stroke: stroke
+        additional: 0:10
+        msg: pull w/ flutter or fly kick
+      - distance: 25
+        stroke: stroke
+        additional: 0:10
+        msg: windshield wiper drill
+      - distance: 25
+        stroke: stroke
+        additional: 0:10
+        msg: in-sweep drill
+      - distance: 25
+        stroke: stroke
+        additional: 0:10
+        msg: 1 pull 2 kick
+      - distance: 50
+        rounds: 4
+        stroke: stroke
+        additional: 0:10
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        rounds: 9
+        stroke: stroke
+        additional: 0:05
+        msg: add 25 free per 100, then take away 25 free per 100. (breast/free) 100/0, 75/25, 50/50, 25/75, 0/100, (free/breast) 75/25, 50/50, 25/75, 0/100
