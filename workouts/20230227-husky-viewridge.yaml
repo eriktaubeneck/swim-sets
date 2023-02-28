@@ -1,0 +1,67 @@
+msg: Monday, Feb 27th 2023 - Sprint Free
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: [400, 300, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+        msg: IM
+      - distance: [200, 100, 100, 100]
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 2
+    subsets:
+      - distance: 200
+        stroke: kick
+      - distance: 25
+        rounds: 2
+        stroke: kick
+        msg: kick on side, high elbow, front to back
+      - distance: 25
+        stroke: free
+        msg: distance per stroke
+      - distance: 25
+        stroke: free
+        msg: build to high rev
+      - distance: 50
+        stroke: free
+        msg: build to 100%
+      - distance: 50
+        rounds: 4
+        stroke: free
+        additional: 0:05
+        msg: descend to 100
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        rounds: [2, 2, 1, 1]
+        stroke: free
+        msg: negative split
+      - distance: 100
+        stroke: ez
+      - distance: 100
+        rounds: 4
+        stroke: free
+        msg: negative split
+      - distance: 100
+        stroke: ez
+      - rounds: [2, 1, 1, 1]
+        subsets:
+          - distance: 50
+            rounds: 4
+            stroke: free
+            additional: 0:10
+
+      - distance: 100
+        stroke: ez
