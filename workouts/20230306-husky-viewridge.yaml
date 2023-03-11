@@ -1,0 +1,76 @@
+msg: Monday, March 6th 2023 - Short Axis, Mid Distance
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: [400, 300, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+        msg: IM
+      - distance: [200, 100, 100, 100]
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 2
+    subsets:
+      - distance: 50
+        stroke: kick
+        additional: 0:10
+        msg: fly kick, streamline on back
+      - distance: 50
+        stroke: fly
+        additional: 0:05
+        msg: left arm, right arm, both arms
+      - distance: 25
+        stroke: fly
+        rounds: 4
+        msg: descend
+        additional: 0:05
+      - distance: 100
+        stroke: free
+        additional: 0:20
+      - distance: 50
+        stroke: kick
+        additional: 0:10
+        msg: brst kick on back, heels to hands, knees underwater
+      - distance: 50
+        stroke: breast
+        additional: 0:05
+        msg: one pull, two kick
+      - distance: 25
+        stroke: breast
+        rounds: 4
+        msg: descend
+      - distance: 100
+        stroke: free
+        additional: 0:20
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        rounds: 4
+        stroke: free
+      - distance: [100, 100, 50, 50]
+        stroke: ez
+        time: [2:30, 2:30, 1:20, 1:20]
+      - distance: 50
+        rounds: [6, 6, 4, 4]
+        stroke: fly
+      - distance: [100, 100, 50, 50]
+        stroke: ez
+        time: [2:30, 2:30, 1:20, 1:20]
+      - distance: 50
+        rounds: [6, 6, 4, 4]
+        stroke: breast
+      - distance: [100, 100, 50, 50]
+        stroke: ez
+        time: [2:30, 2:30, 1:20, 1:20]
