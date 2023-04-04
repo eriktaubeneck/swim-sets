@@ -1,0 +1,45 @@
+msg: Monday, March 20th 2023 - Long Axis Stroke
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: [400, 300, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+        msg: IM
+      - distance: [200, 100, 100, 100]
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 2
+    subsets:
+      - distance: 50
+        stroke: kick
+      - distance: 50
+        stroke: stroke
+        msg: drill. round 1 free, round 2 back
+      - distance: 50
+        stroke: stroke
+        msg: build. round 1 free, round 2 back
+      - distance: 50
+        rounds: 4
+        stroke: stroke
+        msg: descend. round 1 free, round 2 back
+
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: [200, 200, 100, 100]
+        stroke: free
+        rounds: [10, 9, 10, 9]
+        additional_base: 0:10
+        msg: Back/Free split- 0/200, 50/150, 100/100, 150/50, 200/0. Flip to Free/Back-  200/0, 150/50, 100/100, 50/150, 0, 200
