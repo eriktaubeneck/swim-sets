@@ -1,0 +1,50 @@
+msg: Monday, April 3rd 2023 - Long Axis, Starts and Finishes
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: [400, 300, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+        msg: IM
+      - distance: [200, 100, 100, 100]
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 2
+    subsets:
+      - distance: 50
+        stroke: kick
+        rounds: 4
+        additional: 0:10
+      - distance: 100
+        rounds: 4
+        stroke: free
+        additional: 0:05
+      - distance: 50
+        stroke: ez
+
+  - msg: Main Set
+    print_full_stats: True
+    rounds: [6, 5, 4, 4]
+    time: 3:00
+    subsets:
+      - distance: 75
+        stroke: ez
+        time: 0:00
+      - distance: 25
+        stroke: free
+        msg: sprint from a start
+        time: 0:00
+
+  - msg: Warm Down
+    time: 4:00
+    distance: 200
+    stroke: ez
