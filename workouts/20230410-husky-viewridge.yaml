@@ -1,0 +1,77 @@
+msg: Monday, April 10rd 2023 - Short Axis, Turns and Pacing
+print_full_stats: True
+lanes: 3
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    lanes: 3
+    subsets:
+      - distance: [400, 300, 300]
+        stroke: free
+        time: 0:00
+        lanes: 3
+      - distance: 200
+        stroke: kick
+        time: 0:00
+        msg: IM
+        lanes: 3
+      - distance: [200, 100, 100]
+        stroke: im
+        time: 0:00
+        lanes: 3
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 2
+    lanes: 3
+    subsets:
+      - distance: 100
+        stroke: free
+        additional_base: 0:10
+        lanes: 3
+      - distance: 50
+        stroke: kick
+        rounds: 2
+        additional: 0:10
+        msg: breast or fly
+        lanes: 3
+      - distance: 12.5
+        stroke: ez
+        time: 0:30
+        lanes: 3
+      - distance: 50
+        rounds: 4
+        stroke: stroke
+        additional: 0:20
+        msg: breast or fly, start middle of pool
+        lanes: 3
+      - distance: 37.5
+        stroke: ez
+        time: 1:00
+        msg: finish shallow end
+        lanes: 3
+
+  - msg: Main Set
+    print_full_stats: True
+    rounds: [3, 3, 2, 2]
+    lanes: 3
+    subsets:
+      - distance: 50
+        stroke: choice
+        additional: 0:15
+        msg: breast or fly, best avg
+        lanes: 3
+      - distance: 100
+        stroke: free
+        msg: smooth
+        additional: 0:20
+        lanes: 3
+      - distance: 100
+        stroke: stroke
+        msg: breast or fly FAST. broken, 10 sec rest at 25, 75
+        additional: 0:30
+        lanes: 3
+      - distance: 100
+        stroke: ez
+        lanes: 3
