@@ -1,0 +1,53 @@
+msg: Thursday, Oct 5th 2023 - Freestyle
+print_full_stats: True
+lanes: 3
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    lanes: 3
+    subsets:
+      - distance: [400, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+        msg: IM
+      - distance: [200, 100, 100]
+        stroke: im
+        time: 0:00
+
+  - msg: "Preset"
+    print_full_stats: True
+    lanes: 3
+    rounds: 3
+    subsets:
+      - distance: 200
+        stroke: kick
+        additional_base: 0:10
+      - distance: 50
+        stroke: free
+        msg: "Six kick switch"
+        additional_base: 0:15
+      - distance: 50
+        stroke: free
+        msg: "catchup"
+        additional_base: 0:10
+      - distance: 50
+        stroke: free
+        msg: "drag finger tips"
+        additional_base: 0:10
+      - distance: 50
+        stroke: free
+        msg: "smooth"
+        additional_base: 0:05
+
+  - msg: "Main Set"
+    print_full_stats: True
+    lanes: 3
+    subsets:
+      - distance: 100
+        rounds: [12, 10, 8]
+        stroke: free
+        additional_base: 0:10
