@@ -1,0 +1,73 @@
+msg: Thursday, Oct 12th 2023 - Short Axis
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: [400, 400, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 100
+        stroke: kick
+        time: 0:00
+      - rounds: 4
+        distance: 50
+        stroke: stroke
+        time: 0:00
+        msg: "Alt Breast/Fly, 15 sec rest"
+
+  - msg: "Preset: Round 1: Breast, Round 2: Fly, Round3/4: Breast or Fly"
+    print_full_stats: True
+    rounds: 3
+    subsets:
+      - distance: 100
+        stroke: kick
+        msg: "(stroke of round)"
+      - distance: 25
+        stroke: stroke
+        msg: "Drill 1"
+        additional: 0:10
+      - distance: 25
+        stroke: stroke
+        msg: "Drill 2"
+        additional: 0:10
+      - distance: 25
+        stroke: stroke
+        msg: "Drill 3"
+        additional: 0:10
+      - distance: 25
+        stroke: stroke
+        msg: "Drill 4"
+        additional: 0:10
+      - distance: 50
+        stroke: stroke
+        msg: "Smooth"
+        additional: 0:10
+      - distance: 25
+        stroke: stroke
+        msg: "Build"
+        additional: 0:10
+      - distance: 25
+        stroke: stroke
+        msg: "Fast"
+        additional: 0:10
+      - distance: 50
+        stroke: ez
+        additional_base: 0:10
+
+  - msg: "Main Set"
+    print_full_stats: True
+    rounds: [2, 2, 1, 1]
+    subsets:
+      - distance: 100
+        rounds: 4
+        stroke: free
+        additional_base: 0:05
+      - distance: 50
+        rounds: 3
+        stroke: stroke
+        additional: 0:05
+        msg: "Breast or Fly"
+      - distance: 50
+        stroke: ez
