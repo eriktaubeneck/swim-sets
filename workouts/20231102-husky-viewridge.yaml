@@ -1,0 +1,61 @@
+msg: Thursday, Nov 2nd 2023 - Distance Free
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+      - distance: 50
+        stroke: free
+        rounds: 4
+        additional: 0:05
+
+  - msg: Preset
+    print_full_stats: True
+    subsets:
+      - distance: 50
+        rounds: 4
+        stroke: kick
+        additional: 0:05
+      - distance: 50
+        stroke: choice
+        rounds: 4
+        additional: 0:10
+        msg: drill
+      - distance: 50
+        rounds: 4
+        stroke: kick
+        additional: 0:05
+      - distance: 50
+        stroke: choice
+        rounds: 4
+        additional: 0:05
+        msg: build
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        additional: 0:15
+        stroke: free
+      - distance: 100
+        stroke: free
+        rounds: 4
+      - distance: 400
+        additional: 0:15
+        stroke: free
+      - distance: 200
+        stroke: free
+        rounds: [3, 3, 2, 0]
+      - distance: [600, 0, 0, 0]
+        additional: 0:15
+        stroke: free
