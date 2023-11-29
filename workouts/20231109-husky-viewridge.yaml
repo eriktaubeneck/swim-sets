@@ -1,0 +1,69 @@
+msg: Thur, Nov 9th 2023 - Long Axis Sprint
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: [400, 300, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: [200, 100, 100, 100]
+        stroke: im
+        time: 0:00
+
+  - msg: "Preset (round 1: free, round 2: back)"
+    print_full_stats: True
+    rounds: 2
+    subsets:
+      - distance: 200
+        stroke: kick
+      - distance: 25
+        rounds: 2
+        stroke: stroke
+        msg: drill
+      - distance: 25
+        stroke: stroke
+        msg: distance per stroke
+      - distance: 25
+        stroke: stroke
+        msg: build to high rev
+      - distance: 50
+        stroke: free
+        msg: build to 100%
+      - distance: 50
+        rounds: 4
+        stroke: stroke
+        additional: 0:05
+        msg: descend to 100 pace
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        rounds: [2, 2, 1, 1]
+        stroke: free
+        msg: negative split
+      - distance: 50
+        stroke: ez
+      - distance: 200
+        rounds: [2, 2, 1, 1]
+        stroke: back
+        msg: negative split
+      - distance: 50
+        stroke: ez
+      - distance: 100
+        rounds: 4
+        stroke: free
+        msg: negative split
+      - distance: 50
+        stroke: ez
+      - distance: 100
+        rounds: 2
+        stroke: back
+        msg: negative split
+      - distance: 100
+        stroke: ez
