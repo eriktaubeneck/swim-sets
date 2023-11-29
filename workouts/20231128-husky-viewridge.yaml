@@ -1,0 +1,62 @@
+msg: Tue, Nov 28th 2023 - Butterfly
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: [400, 300, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: [200, 100, 100, 100]
+        stroke: im
+        time: 0:00
+
+  - msg: Main Set
+    print_full_stats: True
+    rounds: [3, 3, 2, 2]
+    subsets:
+      - distance: 25
+        rounds: 4
+        stroke: kick
+        msg: Underwater Fly Kick
+      - distance: 50
+        stroke: free
+        additional: 0:10
+      - distance: 25
+        stroke: fly
+        additional: 0:15
+        msg: Drill - Dolphin Dives
+      - distance: 25
+        stroke: fly
+        additional: 0:15
+        msg: Drill - 2,2,2
+      - distance: 25
+        stroke: fly
+        additional: 0:15
+        msg: Drill - Fly Pull / Free Kick
+      - distance: 25
+        stroke: fly
+        additional: 0:15
+        msg: Drill - Downhill Recovery
+      - distance: 100
+        stroke: free
+        additional: 0:05
+        rounds: [4, 4, 3, 3]
+      - distance: 50
+        stroke: ez
+      - distance: 50
+        stroke: fly
+        additional: 0:05
+        msg: ROUND 1 ONLY
+      - distance: 100
+        stroke: fly
+        additional: 0:05
+        msg: ROUND 2 ONLY
+      - distance: 200
+        stroke: fly
+        additional: 0:05
+        msg: ROUND 3 ONLY
