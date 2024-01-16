@@ -1,0 +1,27 @@
+msg: Thursday, Dec 21st, 2023 - Last Practice of 2023
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        stroke: free
+        rounds: 5
+        additional_base: 0:20
+
+  - msg: Holiday Set
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        stroke: choice
+        rounds: 5
+        additional_base: 0:05
+
+      - distance: 100
+        stroke: free
+        rounds: [20, 20, 20, 14]
+        additional_base: 0:10
+      - distance: 100
+        stroke: free
+        rounds: [10, 6, 0, 0]
+        additional_base: 0:05
