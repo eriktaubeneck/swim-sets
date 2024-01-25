@@ -1,0 +1,70 @@
+msg: Monday, Jan 15st, 2024 - Mid Distance Free
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: [400, 300, 300, 300]
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: [200, 100, 100, 100]
+        stroke: im
+        time: 0:00
+
+  - msg: Pre Set
+    print_full_stats: True
+    rounds: [2, 2, 1, 1]
+    subsets:
+      - distance: 100
+        stroke: kick
+      - distance: 50
+        rounds: 2
+        stroke: free
+        additional: 0:10
+        msg: distance per stroke
+      - distance: 25
+        rounds: 4
+        stroke: free
+        additional: 0:10
+        msg: build
+      - distance: 100
+        rounds: 3
+        stroke: free
+        additional: 0:05
+        msg: descend
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 50
+        rounds: 4
+        stroke: free
+        additional: 0:05
+      - distance: 100
+        rounds: [2, 2, 2, 1]
+        stroke: free
+        additional: 0:05
+      - msg: Rest
+        time: 0:30
+      - distance: 50
+        rounds: 4
+        stroke: free
+        additional: 0:05
+      - distance: 200
+        rounds: [2, 2, 2, 1]
+        stroke: free
+        additional: 0:05
+      - msg: Rest
+        time: 0:30
+      - distance: 50
+        rounds: 4
+        stroke: free
+        additional: 0:05
+      - distance: 300
+        rounds: [2, 1, 1, 1]
+        stroke: free
+        additional: 0:05
