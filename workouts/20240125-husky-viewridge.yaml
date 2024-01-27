@@ -1,0 +1,66 @@
+msg: Thursday, Jan 25th, 2024 - IM
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 12:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Pre Set (Fly, Back, Breast, Free)
+    print_full_stats: True
+    rounds: 4
+    subsets:
+      - distance: 50
+        rounds: 3
+        stroke: stroke
+        additional: 0:10
+        msg: 60% effort
+      - distance: 100
+        stroke: im
+        additional: 0:10
+        msg: 90% effort on focus stroke, 60% other strokes
+      - distance: 50
+        stroke: ez
+  - distance: 100
+    rounds: 2
+    stroke: im
+    msg: FAST 95% Effort
+    additional: 0:45
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 50
+        rounds: 3
+        stroke: free
+        additional: 0:15
+        msg: 70% effort
+      - distance: 100
+        rounds: 2
+        stroke: im
+        additional: 0:15
+        msg: Descend to 90% effort
+      - distance: 50
+        stroke: ez
+      - distance: 100
+        rounds: [2, 2, 0, 0]
+        stroke: free
+        additional: 0:15
+        msg: 70% effort
+      - distance: 200
+        rounds: [1, 1, 0, 0]
+        stroke: im
+        additional: 0:15
+        msg: Descend to 90% effort
+      - distance: 50
+        stroke: ez
