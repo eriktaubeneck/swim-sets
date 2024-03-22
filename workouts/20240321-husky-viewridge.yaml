@@ -1,0 +1,61 @@
+msg: Thursday, March 21st, 2024 - Long Axis (Free/Back)
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 200
+        stroke: im
+        time: 0:00
+
+
+  - msg: Pre Set
+    rounds: [3, 2, 2, 2]
+    print_full_stats: True
+    subsets:
+      - distance: [150, 150, 100, 100]
+        stroke: free
+        additional: 0:15
+        msg: middle 50 backstroke
+      - distance: 25
+        stroke: kick
+        additional: 0:10
+        rounds: 4
+        msg: "flutter\n   By 25: stomach, right side, left side, back"
+      - rounds: 2
+        subsets:
+          - distance: 50
+            stroke: free
+            additional: 0:05
+          - distance: 50
+            stroke: back
+            additional: 0:10
+
+
+
+  - msg: "Main Set (Round 1: Free, Round 2: Back)"
+    rounds:  2
+    print_full_stats: True
+    subsets:
+      - distance: [200, 200, 200, 0]
+        stroke: free
+        additional: 0:15
+      - distance: 150
+        stroke: free
+        additional: 0:10
+      - distance: 100
+        stroke: free
+        additional: 0:05
+      - distance: 50
+        stroke: free
+        additional: 0:05
+
+      - distance: 100
+        stroke: ez

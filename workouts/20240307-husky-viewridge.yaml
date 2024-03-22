@@ -1,0 +1,62 @@
+msg: Tuesday, March 7th, 2024 - Sprint Free
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 200
+        stroke: im
+        time: 0:00
+
+
+  - msg: Pre Set
+    rounds: [3, 2, 2, 2]
+    print_full_stats: True
+    subsets:
+      - distance: 25
+        stroke: free
+        additional: 0:10
+        msg: left arm
+      - distance: 25
+        stroke: free
+        additional: 0:10
+        msg: right arm
+      - distance: 25
+        stroke: free
+        additional: 0:10
+        msg: distance per stoke
+      - distance: 25
+        stroke: free
+        additional: 0:10
+        msg: build to sprint
+      - distance: 50
+        rounds: 3
+        stroke: free
+        additional: 0:15
+        msg: descend
+
+
+  - msg: Main Set
+    rounds:  2
+    print_full_stats: True
+    subsets:
+      - distance: [200, 200, 100, 100]
+        stroke: free
+        msg: negative split
+      - distance: 0
+        msg: recover, choice
+        time: 2:00
+      - distance: 50
+        stroke: free
+        additional: 1:00
+        msg: 110% effort
+        rounds: 5
+      - distance: 100
+        stroke: ez
