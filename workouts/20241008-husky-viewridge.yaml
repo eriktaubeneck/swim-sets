@@ -1,0 +1,64 @@
+msg: Thursday, October 3 | Season Opener
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 200
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: [4, 4, 3, 3]
+    subsets:
+      - distance: 100
+        stroke: kick
+      - distance: 25
+        rounds: 2
+        stroke: choice
+        msg: drill
+      - distance: 50
+        msg: build
+        stroke: choice
+        additional: 0:20
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 50
+        rounds: 4
+        stroke: free
+        additional: 0:05
+      - distance: 100
+        rounds: [2, 2, 2, 1]
+        stroke: free
+        additional: 0:05
+      - msg: Rest
+        time: 0:30
+      - distance: 50
+        rounds: 4
+        stroke: free
+        additional: 0:05
+      - distance: 200
+        rounds: [2, 2, 2, 1]
+        stroke: free
+        additional: 0:05
+      - msg: Rest
+        time: 0:30
+      - distance: 50
+        rounds: 4
+        stroke: free
+        additional: 0:05
+      - distance: 300
+        rounds: [2, 1, 1, 0]
+        stroke: free
+        additional: 0:05
