@@ -1,0 +1,62 @@
+msg: Thursday, Oct 17th 2024 - Endurance Free
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 2
+    subsets:
+      - distance: 100
+        stroke: kick
+        additional: 0:10
+      - distance: 75
+        rounds: 3
+        stroke: im
+        additional: 0:10
+      - distance: 25
+        stroke: ez
+
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        stroke: free
+        additional_base: 0:05
+      - distance: 50
+        stroke: free
+        rounds: 4
+        additional_base: 0:10
+      - time: 0:30
+        msg: rest
+      - distance: 300
+        stroke: free
+        additional_base: 0:10
+      - distance: 75
+        stroke: free
+        rounds: 4
+        additional_base: 0:10
+      - time: 0:30
+        msg: rest
+      - distance: 400
+        stroke: free
+        additional_base: 0:10
+        rounds: [1, 1, 0, 0]
+      - distance: 100
+        stroke: free
+        rounds: [4, 4, 0, 0]
+        additional_base: 0:10
