@@ -1,0 +1,58 @@
+msg: Tuesday, Jan 14 | Sprint Free
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 10:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Pre Set
+    print_full_stats: True
+    rounds: [3, 3, 3, 2]
+    subsets:
+      - distance: 75
+        stroke: free
+        additional: 0:15
+      - distance: 25
+        stroke: kick
+        msg: underwater
+        additional: 0:05
+      - distance: 25
+        rounds: 4
+        stroke: free
+        msg: drill (choice)
+        additional: 0:15
+      - distance: 50
+        rounds: 3
+        stroke: free
+        msg: descend to 80% effort
+
+  - msg: Main Set
+    print_full_stats: True
+    rounds: 3
+    subsets:
+      - distance: [200, 200, 150, 100]
+        stroke: free
+        additional_base: 0:10
+      - distance: 50
+        stroke: free
+        additional_base: 0:10
+        msg: build
+        rounds: 3
+      - distance: 25
+        rounds: 3
+        stroke: free
+        msg: EZ | Sprint 100% effort | EZ
+        time: [0:35, 0:40, 0:50, 1:00]
+      - distance: 75
+        stroke: free
+        msg: 80% effort
