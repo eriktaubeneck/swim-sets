@@ -1,0 +1,64 @@
+msg: Feb 11, 2025 - Sprint Free
+print_full_stats: True
+subsets:
+  - msg: Warmup
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        stroke: free
+        time: :00
+      - distance: 100
+        stroke: im
+        time: :00
+      - distance: 200
+        stroke: kick
+        time: :00
+      - distance: 200
+        stroke: free
+        msg: pull
+        time: :00
+
+  - msg: Preset
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        stroke: free
+        additional: 0:05
+        rounds: [10, 10, 6, 5]
+
+  - msg: Main Set
+    print_full_stats: True
+    rounds: [3, 2, 2, 2]
+    subsets:
+      - distance: 50
+        stroke: kick
+        additional: 0:10
+        rounds: 2
+
+      - distance: 50
+        stroke: free
+        msg: desc
+        additional: 0:05
+        rounds: 4
+
+      - distance: 50
+        stroke: ez
+
+      - distance: 100
+        stroke: free
+        msg: Sprint, broken (25, 50, 25 w/ 5 sec rest)
+
+      - distance: 50
+        stroke: ez
+
+
+  - msg: Post Set (if time permits)
+    print_full_stats: True
+    time: 5:00
+    subsets:
+      - distance: 50
+        msg: scull down, double arm backstroke back, 15 sec rest
+        stroke: free
+        rounds: 6
+        time: 0:00
