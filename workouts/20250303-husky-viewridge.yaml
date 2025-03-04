@@ -1,0 +1,55 @@
+msg: Mar 3, 2025 - Mid Distance
+print_full_stats: True
+subsets:
+  - msg: Warmup
+    time: 12:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: :00
+      - distance: 200
+        stroke: kick
+        time: :00
+      - distance: 100
+        stroke: im
+        time: :00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: [4, 4, 3, 3]
+    subsets:
+      - distance: 50
+        stroke: free
+        additional: 0:10
+        msg: catch up drill
+      - distance: 50
+        stroke: free
+        additional: 0:10
+        msg: 10 yards underwater
+      - distance: 50
+        stroke: free
+        additional: 0:10
+        msg: build
+      - distance: 100
+        stroke: free
+        additional: 0:10
+        msg: pull
+      - distance: 100
+        stroke: im
+        additional: 0:10
+        msg: pull
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        rounds: [10, 10, 8, 6]
+        stroke: free
+        additional_base: 0:05
+      - distance: 50
+        stroke: ez
+      - distance: 100
+        rounds: [6, 4, 4, 2]
+        stroke: free
