@@ -1,0 +1,82 @@
+msg: Monday, Oct 7th, 2025 - Fly
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 12:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Pre Set
+    print_full_stats: True
+    rounds: [3, 3, 2, 2]
+    subsets:
+      - distance: 25
+        rounds: 4
+        stroke: fly
+        additional: 0:15
+        msg: kick 10y underwater
+      - distance: 50
+        stroke: fly
+        additional: 0:10
+        msg: left arm down, right arm back
+      - distance: 50
+        stroke: fly
+        additional: 0:10
+        msg: left, right, both
+      - distance: 75
+        stroke: fly
+        additional: 0:05
+        msg: free, fly, free by 25
+      - distance: 75
+        stroke: fly
+        additional: 0:05
+        msg: fly, free, fly by 25
+      - distance: 100
+        stroke: free
+        additional: 0:20
+        msg: smooth
+
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        rounds: [1, 1, 0, 0]
+        stroke: free
+        additional: 0:10
+      - distance: 75
+        rounds: [2, 2, 0, 0]
+        stroke: fly
+        additional: 0:15
+      - distance: 50
+        rounds: [1, 1, 0, 0]
+        stroke: ez
+
+      - distance: 200
+        stroke: free
+        additional: 0:10
+      - distance: 50
+        rounds: 3
+        stroke: fly
+        additional: 0:15
+      - distance: 50
+        stroke: ez
+      - distance: 100
+        stroke: free
+        additional: 0:10
+      - distance: 25
+        rounds: 4
+        stroke: fly
+        additional: 0:10
+      - distance: 50
+        stroke: ez
