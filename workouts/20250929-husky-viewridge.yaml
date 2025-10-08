@@ -1,0 +1,56 @@
+msg: Monday, Sept 29th 2025 - Sprint Free
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 15:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 2
+    subsets:
+      - distance: 100
+        stroke: kick
+        additional: 0:15
+      - distance: [200, 200, 100, 100]
+        stroke: free
+        additional: 0:20
+        msg: smooth
+      - distance: 50
+        stroke: free
+        rounds: 4
+        additional: 0:10
+        msg: descend
+
+  - msg: Main Set
+    print_full_stats: True
+    rounds: [4, 3, 3, 2]
+    subsets:
+      - distance: 50
+        stroke: free
+        additional: 0:20
+        msg: drill
+      - distance: 50
+        stroke: free
+        additional: 0:20
+        msg: distance per stroke
+      - distance: 50
+        stroke: free
+        additional: 0:20
+        msg: build
+      - distance: 50
+        rounds: 4
+        stroke: free
+        msg: descend
+      - distance: 50
+        stroke: ez
