@@ -1,0 +1,76 @@
+msg: Tuesday, Oct 22nd 2024 - IM
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 10:00
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        stroke: free
+        time: 0:00
+      - distance: 100
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Preset - IM Order by Round
+    print_full_stats: True
+    rounds: 4
+    subsets:
+      - distance: 50
+        stroke: kick
+        additional: 0:10
+      - distance: 25
+        rounds: 2
+        stroke: stroke
+        msg: drill
+        additional: 0:20
+      - distance: 50
+        stroke: stroke
+        additional: 0:10
+      - msg: rest
+        time: 0:15
+
+
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        rounds: [4, 4, 3, 3]
+        stroke: free
+        additional_base: 0:05
+      - distance: 100
+        rounds: [1, 1, 1, 1]
+        stroke: im
+        additional_base: 0:05
+
+      - distance: 100
+        rounds: [3, 3, 2, 2]
+        stroke: free
+        additional_base: 0:05
+      - distance: 100
+        rounds: [2, 2, 2, 2]
+        stroke: im
+        additional_base: 0:05
+
+      - distance: 100
+        rounds: [2, 2, 1, 0]
+        stroke: free
+        additional_base: 0:05
+      - distance: 100
+        rounds: [3, 3, 3, 0]
+        stroke: im
+        additional_base: 0:05
+
+      - distance: 100
+        rounds: [1, 1, 0, 0]
+        stroke: free
+        additional_base: 0:05
+      - distance: 100
+        rounds: [4, 4, 0, 0]
+        stroke: im
+        additional_base: 0:05
