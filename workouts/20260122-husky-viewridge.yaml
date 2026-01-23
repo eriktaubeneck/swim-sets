@@ -1,0 +1,66 @@
+msg: Thursday, Jan 22nd | Challenge Free
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 10:00
+    print_full_stats: True
+    subsets:
+      - distance: 200
+        stroke: free
+        time: 0:00
+      - distance: 100
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Main Set \n Decrease from 100 --> 75 --> 50 after missing sendoff. Lanes ~6-8 start with 75s.
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        rounds: 4
+        stroke: free
+        time: 1:35
+      - distance: 50
+        stroke: ez
+        time: 2:00
+      - distance: 100
+        rounds: 4
+        stroke: free
+        time: 1:30
+      - distance: 50
+        stroke: ez
+        time: 2:00
+      - distance: 100
+        rounds: 4
+        stroke: free
+        time: 1:25
+      - distance: 50
+        stroke: ez
+        time: 2:00
+      - distance: 100
+        rounds: 4
+        stroke: free
+        time: 1:20
+      - distance: 50
+        stroke: ez
+        time: 2:00
+      - distance: 100
+        rounds: 4
+        stroke: free
+        time: 1:15
+      - distance: 50
+        stroke: ez
+        time: 2:00
+      - distance: 100
+        rounds: 4
+        stroke: free
+        time: 1:10
+      - distance: 50
+        stroke: ez
+        time: 2:00
+      - distance: 100
+        rounds: 4
+        stroke: free
+        time: 1:05
