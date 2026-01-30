@@ -210,6 +210,7 @@ class SwimSet:
             f"{d}" if d != self.max_distance else "" for d in self.distance
         ]
         rnds: List[str] = [f"{r}" if r != self.max_rounds else "" for r in self.rounds]
+        self.time = [t if r > 0 else timedelta(0) for t, r in zip(self.time, self.rounds)]
 
         dist_rnds: List[str] = []
         for d, r in zip(dist, rnds):
@@ -268,7 +269,8 @@ class SwimSet:
         return msg
 
     def __repr__(self):
-        return self.pprint()
+        # remove the first 4 spaces to align everything to the title
+        return "\n".join([l.removeprefix("    ") for l in self.pprint().split("\n")])
 
 
 def main():
