@@ -1,8 +1,8 @@
-msg: Monday, Feb 9th, 2026 - Sprint Free
+msg: Tue, Fed 10th, 2026 - Fly
 print_full_stats: True
 subsets:
   - msg: Warm Up
-    time: 15:00
+    time: 12:00
     print_full_stats: True
     subsets:
       - distance: 300
@@ -15,42 +15,60 @@ subsets:
         stroke: im
         time: 0:00
 
-  - msg: Preset
+  - msg: Pre Set
     print_full_stats: True
-    rounds: [3, 2, 2, 2]
+    rounds: 2
     subsets:
-      - distance: 100
-        stroke: kick
-        additional: 0:15
-      - distance: [200, 200, 100, 100]
-        stroke: free
-        additional: 0:20
-        msg: smooth
       - distance: 50
-        stroke: free
-        rounds: 4
+        stroke: fly
+        additional: 0:15
+        msg: 10y underwater of walls
+      - distance: 50
+        stroke: fly
         additional: 0:10
-        msg: descend
+        msg: left arm down, right arm back
+      - distance: 75
+        stroke: fly
+        additional: 0:05
+        msg: free, fly, free by 25
+      - distance: 75
+        stroke: free
+        additional: 0:10
+        msg: smooth
+
+
 
   - msg: Main Set
     print_full_stats: True
-    rounds: [3, 3, 3, 2]
+    rounds: 2
     subsets:
-      - distance: 50
+      - distance: 300
+        rounds: [1, 1, 0, 0]
         stroke: free
-        additional: 0:20
-        msg: drill
+        additional: 0:10
+      - distance: 75
+        rounds: [2, 2, 0, 0]
+        stroke: fly
+        additional: 0:15
       - distance: 50
+        rounds: [1, 1, 0, 0]
+        stroke: ez
+
+      - distance: 200
         stroke: free
-        additional: 0:20
-        msg: distance per stroke
+        additional: 0:10
       - distance: 50
+        rounds: 3
+        stroke: fly
+        additional: 0:15
+      - distance: 50
+        stroke: ez
+      - distance: 100
         stroke: free
-        additional: 0:20
-        msg: build
-      - distance: 50
+        additional: 0:10
+      - distance: 25
         rounds: 4
-        stroke: free
-        msg: golf
+        stroke: fly
+        additional: 0:10
       - distance: 50
         stroke: ez
