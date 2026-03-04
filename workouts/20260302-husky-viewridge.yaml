@@ -1,0 +1,61 @@
+msg: Mar 2, 2026 - IM
+print_full_stats: True
+subsets:
+  - msg: Warmup
+    time: 12:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: :00
+      - distance: 200
+        stroke: kick
+        time: :00
+      - distance: 100
+        stroke: im
+        time: :00
+
+  - msg: Pre Set (IM order by round)
+    print_full_stats: True
+    rounds: 4
+    subsets:
+      - distance: 100
+        stroke: kick
+        msg: (Stroke of round)
+        additional: 0:10
+      - distance: 50
+        rounds: 2
+        stroke: stroke
+        additional: 0:10
+        msg: smooth
+      - distance: 100
+        stroke: im
+        additional: 0:10
+        msg: (fast on stroke of round)
+      - msg: rest
+        time: [0:10, 0:10, 0:25, 0:40]
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        stroke: free
+        additional: 0:05
+        msg: (Smooth)
+      - distance: 100
+        rounds: [4, 3, 2, 2]
+        stroke: im
+        additional: 0:05
+        msg: Descend
+      - distance: 50
+        stroke: ez
+      - distance: 200
+        rounds: [1, 1, 1, 0]
+        stroke: free
+        msg: (Smooth)
+        additional: 0:10
+      - distance: 200
+        rounds: [3, 2, 1, 0]
+        stroke: im
+        msg: Descend
