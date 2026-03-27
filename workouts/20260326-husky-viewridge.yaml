@@ -1,0 +1,45 @@
+msg: Thursday, March 26th 2026 - Mid Distance
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 12:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 2
+    subsets:
+      - distance: 50
+        stroke: kick
+        rounds: 4
+      - distance: [200, 200, 100, 100]
+        stroke: free
+        additional: 0:10
+        msg: neg split
+      - distance: 100
+        stroke: ez
+
+
+  - msg: Main Set
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        rounds: [10, 8, 7, 5]
+        stroke: free
+        additional_base: 0:05
+      - distance: 100
+        stroke: ez
+        time: [3:00, 3:00, 3:00, 3:00]
+      - distance: 100
+        stroke: free
+        rounds: [10, 8, 7, 5]
