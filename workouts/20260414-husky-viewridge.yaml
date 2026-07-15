@@ -1,0 +1,45 @@
+msg: April 14, 2026 - Sprint Free
+print_full_stats: True
+subsets:
+  - msg: Warmup
+    time: 12:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: :00
+      - distance: 200
+        stroke: kick
+        time: :00
+      - distance: 100
+        stroke: im
+        time: :00
+
+  - msg: Preset
+    print_full_stats: True
+    subsets:
+      - distance: 100
+        stroke: free
+        rounds: [10, 10, 6, 5]
+
+  - msg: Main Set
+    print_full_stats: True
+    rounds: [5, 4, 4, 3]
+    subsets:
+
+      - distance: 50
+        stroke: free
+        msg: desc
+        additional: 0:05
+        rounds: 3
+
+      - distance: 25
+        stroke: ez
+
+      - distance: 75
+        stroke: free
+        additional: 0:10
+        msg: Sprint, broken from dive
+
+      - distance: 50
+        stroke: ez
