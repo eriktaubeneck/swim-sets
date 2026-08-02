@@ -1,6 +1,6 @@
 # swimsets.py
 
-this is a very small python script which takes `example-workout.yaml` and turns it into printable PDFs: one coach copy (with stats) and one swimmer copy per lane (just that lane's own numbers, no stats). each PDF auto-shrinks its font to fit on a single page (or however many pages you ask for).
+this is a very small python script which takes `example-workout.yaml` and turns it into two printable PDFs: a coach copy (with stats) and an athlete copy (all 4 lanes' times, no stats). each set's times are laid out in a table so every lane's numbers line up in a vertical column; if a set's distance, rounds, and time are the same for every lane, the time is just written once inline (e.g. `Warm Up @ 12:00`) instead of repeating it in every column. each PDF auto-shrinks its font to fit on a single page (or however many pages you ask for).
 
 ## installation and run
 - clone this repo
@@ -8,8 +8,8 @@ this is a very small python script which takes `example-workout.yaml` and turns 
 - `virtualenv -p python3 venv`
 - `source venv/bin/activate`
 - edit `example-workout.yaml` and `strokes.yaml` as desired
-- `make` — writes `example-workout-coach.pdf` and `example-workout-lane{1,2,3,4}.pdf` to the repo root
-- `make print` — same, then opens all the PDFs in Preview
+- `make` — writes `example-workout-coach.pdf` and `example-workout-athlete.pdf` to the repo root
+- `make print` — same, then opens both PDFs in Preview
 - `make text` — old behavior, prints the plain-text swimmer/coach view to stdout
 
 or run it directly for more control:
