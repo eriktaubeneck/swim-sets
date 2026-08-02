@@ -1,7 +1,12 @@
+import argparse
+import os
+import subprocess
 from datetime import timedelta
 from typing import Any, Callable, Dict, List, Optional, Union, cast
 
 from ruamel.yaml import YAML
+
+from render import render_pdf
 
 zero_seconds: timedelta = timedelta(seconds=0)
 
@@ -272,24 +277,106 @@ class SwimSet:
         # remove the first 4 spaces to align everything to the title
         return "\n".join([l.removeprefix("    ") for l in self.pprint().split("\n")])
 
+    def pprint_lane(self, lane: int) -> str:
+        # a lane with 0 rounds skips this set (and its subsets) entirely
+        if self.rounds[lane] == 0:
+            return ""
+        rounds_str: str = f"{self.rounds[lane]}x " if self.rounds[lane] != 1 else ""
+        distance_str: str = f"{self.distance[lane]} " if self.distance[lane] else ""
+        msg: str = f"{rounds_str}{distance_str}"
+        msg += (
+            f'{bool(self.stroke)*(" "+str(self.stroke)+" "*bool(self.msg))}{self.msg} '
+        )
+        if self.time[lane] != zero_seconds:
+            msg += f"\n    @ {self.print_dt(self.time[lane])} "
+        msg += "\n"
+
+        submsgs: List[str] = "".join(
+            [s.pprint_lane(lane) for s in self.subsets]
+        ).split("\n")
+        submsg: str = "".join([f"    {s}\n" for s in submsgs if s])
+        msg += f"{submsg}"
+        return msg
+
+    def lane_view(self, lane: int) -> str:
+        # remove the first 4 spaces to align everything to the title, same
+        # convention as __repr__
+        return "\n".join(
+            [l.removeprefix("    ") for l in self.pprint_lane(lane).split("\n")]
+        )
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Render a swim workout to printable PDFs (a coach copy with "
+        "stats, plus one swimmer copy per lane)."
+    )
+    parser.add_argument(
+        "workout", nargs="?", default="example-workout.yaml", help="workout yaml file"
+    )
+    parser.add_argument("--strokes", default="strokes.yaml", help="strokes yaml file")
+    parser.add_argument(
+        "--outdir", default=".", help="directory to write PDFs to"
+    )
+    parser.add_argument(
+        "--pages",
+        type=int,
+        default=1,
+        help="max pages to fit each document onto (default: 1)",
+    )
+    parser.add_argument(
+        "--print",
+        dest="do_print",
+        action="store_true",
+        help="open the generated PDFs in Preview",
+    )
+    parser.add_argument(
+        "--text",
+        action="store_true",
+        help="print plain text to stdout instead of generating PDFs",
+    )
+    return parser.parse_args()
+
 
 def main():
-    yaml = YAML(typ="safe")
-    strokes_yaml: str = "strokes.yaml"
-    with open(strokes_yaml, "r") as f:
-        strokes_dict: Dict[Any, Any] = yaml.load(f)
+    args = parse_args()
 
+    yaml = YAML(typ="safe")
+    with open(args.strokes, "r") as f:
+        strokes_dict: Dict[Any, Any] = yaml.load(f)
     strokes = {cast(str, k): Stroke(**v) for k, v in strokes_dict.items()}
 
-    workout_yaml: str = "example-workout.yaml"
-    with open(workout_yaml, "r") as f:
+    with open(args.workout, "r") as f:
         workout_dict: Dict[Any, Any] = yaml.load(f)
     workout: SwimSet = SwimSet.build_from_nested_dict(
         workout_dict,
         strokes_config=strokes,
     )
-    print(workout)
-    print(workout.pprint(coach_view=True))
+
+    if args.text:
+        print(workout)
+        print(workout.pprint(coach_view=True))
+        return
+
+    os.makedirs(args.outdir, exist_ok=True)
+    base: str = os.path.splitext(os.path.basename(args.workout))[0]
+
+    paths: List[str] = []
+
+    coach_path = os.path.join(args.outdir, f"{base}-coach.pdf")
+    render_pdf(workout.pprint(coach_view=True), coach_path, max_pages=args.pages)
+    paths.append(coach_path)
+
+    for lane in range(workout.lanes):
+        lane_path = os.path.join(args.outdir, f"{base}-lane{lane + 1}.pdf")
+        render_pdf(workout.lane_view(lane), lane_path, max_pages=args.pages)
+        paths.append(lane_path)
+
+    for path in paths:
+        print(f"wrote {path}")
+
+    if args.do_print:
+        subprocess.run(["open", *paths], check=True)
 
 
 if __name__ == "__main__":

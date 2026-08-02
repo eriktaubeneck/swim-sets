@@ -1,6 +1,6 @@
 # swimsets.py
 
-this is a very small python script which takes `example-workout.yaml` and prints out a swimset.
+this is a very small python script which takes `example-workout.yaml` and turns it into printable PDFs: one coach copy (with stats) and one swimmer copy per lane (just that lane's own numbers, no stats). each PDF auto-shrinks its font to fit on a single page (or however many pages you ask for).
 
 ## installation and run
 - clone this repo
@@ -8,7 +8,16 @@ this is a very small python script which takes `example-workout.yaml` and prints
 - `virtualenv -p python3 venv`
 - `source venv/bin/activate`
 - edit `example-workout.yaml` and `strokes.yaml` as desired
-- `make`
+- `make` — writes `example-workout-coach.pdf` and `example-workout-lane{1,2,3,4}.pdf` to the repo root
+- `make print` — same, then opens all the PDFs in Preview
+- `make text` — old behavior, prints the plain-text swimmer/coach view to stdout
+
+or run it directly for more control:
+```
+python swimsets.py path/to/workout.yaml --strokes strokes.yaml --outdir out/ --pages 1
+python swimsets.py path/to/workout.yaml --print   # also opens the PDFs in Preview
+```
+`--pages n` sets the max pages each document should fit onto (default 1); the font size is picked automatically to fit, falling back to landscape if a line is too wide even at the smallest readable size.
 
 ## data structure
 
@@ -121,7 +130,6 @@ total - L1:8000@1:26:15, L2:8000@1:36:15, L3:7500@1:36:15, L4:6750@1:40:50
 ## todo
 i will likely never actually get to these, and highly encourage forking this repo if you want to expand on it at all
 
-- real cli
 - better handling of lane count
 - tests?
 - package?
