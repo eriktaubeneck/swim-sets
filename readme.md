@@ -19,6 +19,8 @@ python swimsets.py path/to/workout.yaml --print   # also opens the PDFs in Previ
 ```
 `--pages n` sets the max pages each document should fit onto (default 1); the font size is picked automatically to fit, falling back to landscape if a line is too wide even at the smallest readable size.
 
+the PDFs use [Berkeley Mono](https://berkeleygraphics.com/typefaces/berkeley-mono/) if it's installed (checked under `~/Library/Fonts`, `/Library/Fonts`, and `/System/Library/Fonts`), falling back to macOS's built-in Menlo, and finally to the PDF-standard Courier if neither is present — all three are monospace, which is what makes the lane-time columns line up.
+
 ## data structure
 
 the basic idea is that a practice is just a collection of `SwimSets`. any set can have subsets, which are in turn `SwimSets`. this is infinitely recursive, but your swimmer might hate you if you go too deep... the code just adds up the time for you from all those recursive sets, so you can tweak and plan.

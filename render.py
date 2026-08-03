@@ -1,16 +1,59 @@
-from typing import List, Tuple
+import glob
+import os
+from typing import List, Optional, Tuple
 
 from reportlab.lib.pagesizes import landscape, letter
+from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
-FONT: str = "Courier"
-FONT_BOLD: str = "Courier-Bold"
 MARGIN: float = 36.0
 LINE_SPACING: float = 1.15
 MAX_SIZE: float = 24.0
 MIN_SIZE: float = 5.0
 SIZE_STEP: float = 0.5
+
+FONT_DIRS: List[str] = [
+    os.path.expanduser("~/Library/Fonts"),
+    "/Library/Fonts",
+    "/System/Library/Fonts",
+    "/System/Library/Fonts/Supplemental",
+]
+
+
+def _find_font_file(pattern: str, exclude: str = "") -> Optional[str]:
+    matches = [
+        f
+        for d in FONT_DIRS
+        for f in glob.glob(os.path.join(d, pattern))
+        if not (exclude and exclude in os.path.basename(f).lower())
+    ]
+    return sorted(matches)[0] if matches else None
+
+
+def _register_monospace_font() -> Tuple[str, str]:
+    # prefer Berkeley Mono, then macOS's built-in Menlo, then the PDF-standard
+    # Courier that's always available with no font files needed
+    berkeley_regular = _find_font_file("*[Bb]erkeley*[Mm]ono*[Rr]egular*.[ot]tf")
+    berkeley_bold = _find_font_file(
+        "*[Bb]erkeley*[Mm]ono*[Bb]old*.[ot]tf", exclude="italic"
+    )
+    if berkeley_regular and berkeley_bold:
+        pdfmetrics.registerFont(TTFont("SwimMono", berkeley_regular))
+        pdfmetrics.registerFont(TTFont("SwimMono-Bold", berkeley_bold))
+        return "SwimMono", "SwimMono-Bold"
+
+    menlo_ttc = "/System/Library/Fonts/Menlo.ttc"
+    if os.path.exists(menlo_ttc):
+        pdfmetrics.registerFont(TTFont("SwimMono", menlo_ttc, subfontIndex=0))
+        pdfmetrics.registerFont(TTFont("SwimMono-Bold", menlo_ttc, subfontIndex=1))
+        return "SwimMono", "SwimMono-Bold"
+
+    return "Courier", "Courier-Bold"
+
+
+FONT, FONT_BOLD = _register_monospace_font()
 
 
 def _lines_per_page(font_size: float, avail_height: float) -> int:
