@@ -1,14 +1,22 @@
 import argparse
 import os
 import subprocess
+from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Any, Callable, Dict, List, Optional, Union, cast
 
 from ruamel.yaml import YAML
 
-from render import Row, render_pdf
+from render import render_pdf
 
 zero_seconds: timedelta = timedelta(seconds=0)
+
+
+@dataclass
+class Row:
+    indent: int
+    text: str
+    lane_times: List[str] = field(default_factory=list)
 
 
 def build_timedelta(time: str) -> timedelta:
@@ -207,55 +215,6 @@ class SwimSet:
             return ""
         return f"{self.max_distance} "
 
-    @property
-    def time_str(self) -> str:
-        if not self.max_time:
-            return ""
-        dist: List[str] = [
-            f"{d}" if d != self.max_distance else "" for d in self.distance
-        ]
-        rnds: List[str] = [f"{r}" if r != self.max_rounds else "" for r in self.rounds]
-        self.time = [t if r > 0 else timedelta(0) for t, r in zip(self.time, self.rounds)]
-
-        dist_rnds: List[str] = []
-        for d, r in zip(dist, rnds):
-            if d and r and not (d == "0" or r == "0"):
-                dist_rnds.append(f"({r}x, {d})")
-            elif r:
-                dist_rnds.append(f"({r}x)")
-            elif d:
-                dist_rnds.append(f"({d})")
-            else:
-                dist_rnds.append("")
-
-        tm_str: str = "  ".join(
-            [self.print_dt(t) + dr for t, dr in zip(self.time, dist_rnds)]
-        )
-        return f"\n    @ {tm_str} "
-
-    @property
-    def full_stats_str(self) -> str:
-        if not self.print_full_stats:
-            return ""
-        totals: str = ", ".join(
-            f"L{i+1}:{d}@{self.print_dt(t)}"
-            for i, (t, d) in enumerate(zip(self.total_time, self.total_distance))
-        )
-        fs_str: str
-
-        if self.max_rounds > 1:
-            per_round: str = ", ".join(
-                f"L{i+1}:{int(d/r)}@{self.print_dt(t/r)}"
-                for i, (t, d, r) in enumerate(
-                    zip(self.total_time, self.total_distance, self.rounds)
-                )
-            )
-            fs_str = f"\ntotal     - {totals} "
-            fs_str += f"\nper round - {per_round}"
-        else:
-            fs_str = f"\ntotal - {totals} "
-        return fs_str
-
     def full_stats_lines(self) -> List[str]:
         if not self.print_full_stats:
             return []
@@ -278,9 +237,10 @@ class SwimSet:
         text += (
             f'{bool(self.stroke)*(" "+str(self.stroke)+" "*bool(self.msg))}{self.msg}'
         )
-        lane_times: List[str] = []
+        rows: List[Row]
         if not self.max_time:
             text += f" {self.round_edits}"
+            rows = [Row(indent, text.strip())]
         else:
             times: List[timedelta] = [
                 t if r > 0 else zero_seconds for t, r in zip(self.time, self.rounds)
@@ -292,6 +252,7 @@ class SwimSet:
             )
             if uniform:
                 text += f" @ {self.print_dt(times[0])}"
+                rows = [Row(indent, text.strip())]
             else:
                 dist: List[str] = [
                     f"{d}" if d != self.max_distance else "" for d in self.distance
@@ -309,37 +270,37 @@ class SwimSet:
                         annotations.append(f" ({d})")
                     else:
                         annotations.append("")
-                lane_times = [
+                lane_times: List[str] = [
                     f"{self.print_dt(t)}{a}" for t, a in zip(times, annotations)
                 ]
-
-        rows: List[Row] = [Row(indent, text.strip(), lane_times)]
+                rows = [
+                    Row(indent, text.strip()),
+                    Row(indent + 1, "@", lane_times),
+                ]
         if coach_view:
-            rows.extend(Row(indent, line, []) for line in self.full_stats_lines())
+            rows.extend(Row(indent, line) for line in self.full_stats_lines())
         for s in self.subsets:
             rows.extend(s.rows(coach_view, indent + 1))
         return rows
 
-    def pprint(self, coach_view: bool = False) -> str:
-        msg: str = f"{self.rounds_str}{self.distance_str}"
-        msg += (
-            f'{bool(self.stroke)*(" "+str(self.stroke)+" "*bool(self.msg))}{self.msg} '
-        )
-        msg += f"{self.round_edits}"
-        if coach_view:
-            msg += f"{self.full_stats_str}"
-        msg += f"{self.time_str}\n"
 
-        submsgs: List[str] = "".join(
-            [s.pprint(coach_view) for s in self.subsets]
-        ).split("\n")
-        submsg: str = "".join([f"    {s}\n" for s in submsgs if s])
-        msg += f"{submsg}"
-        return msg
-
-    def __repr__(self):
-        # remove the first 4 spaces to align everything to the title
-        return "\n".join([l.removeprefix("    ") for l in self.pprint().split("\n")])
+def render_text(rows: List[Row]) -> str:
+    # the title (rows[0]) stays flush left; everything else is deindented by
+    # one level, since a level was already "used up" wrapping the top-level
+    # sections under the title
+    cell_width: int = max(
+        (len(t) for r in rows for t in r.lane_times), default=0
+    )
+    lines: List[str] = []
+    for i, row in enumerate(rows):
+        indent = row.indent if i == 0 else max(row.indent - 1, 0)
+        pad = "    " * indent
+        if row.lane_times:
+            cells = "  ".join(t.rjust(cell_width) for t in row.lane_times)
+            lines.append(f"{pad}{row.text} {cells}")
+        else:
+            lines.append(f"{pad}{row.text}")
+    return "\n".join(lines)
 
 
 def parse_args() -> argparse.Namespace:
@@ -390,24 +351,20 @@ def main():
     )
 
     if args.text:
-        print(workout)
-        print(workout.pprint(coach_view=True))
+        print(render_text(workout.rows(coach_view=False)))
+        print()
+        print(render_text(workout.rows(coach_view=True)))
         return
 
     os.makedirs(args.outdir, exist_ok=True)
     base: str = os.path.splitext(os.path.basename(args.workout))[0]
 
     coach_path = os.path.join(args.outdir, f"{base}-coach.pdf")
-    render_pdf(
-        workout.rows(coach_view=True), workout.lanes, coach_path, max_pages=args.pages
-    )
+    render_pdf(render_text(workout.rows(coach_view=True)), coach_path, max_pages=args.pages)
 
     athlete_path = os.path.join(args.outdir, f"{base}-athlete.pdf")
     render_pdf(
-        workout.rows(coach_view=False),
-        workout.lanes,
-        athlete_path,
-        max_pages=args.pages,
+        render_text(workout.rows(coach_view=False)), athlete_path, max_pages=args.pages
     )
 
     paths: List[str] = [coach_path, athlete_path]

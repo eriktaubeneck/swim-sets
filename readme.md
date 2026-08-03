@@ -1,6 +1,6 @@
 # swimsets.py
 
-this is a very small python script which takes `example-workout.yaml` and turns it into two printable PDFs: a coach copy (with stats) and an athlete copy (all 4 lanes' times, no stats). each set's times are laid out in a table so every lane's numbers line up in a vertical column; if a set's distance, rounds, and time are the same for every lane, the time is just written once inline (e.g. `Warm Up @ 12:00`) instead of repeating it in every column. each PDF auto-shrinks its font to fit on a single page (or however many pages you ask for).
+this is a very small python script which takes `example-workout.yaml` and turns it into two printable PDFs: a coach copy (with stats) and an athlete copy (all 4 lanes' times, no stats). the title is bold and everything below it is deindented one level; each set's lane times sit on their own line right underneath it (e.g. `4x 50  Kick` then `    @ 1:10  1:15  1:30  1:40`), right-justified to a shared column width so every lane's numbers line up down the page. if a set's distance, rounds, and time are the same for every lane, the time is just written once inline instead (e.g. `Warm Up @ 12:00`). each PDF auto-shrinks its font to fit on a single page (or however many pages you ask for) — since times are on their own line, the font size is normally limited by the widest single line, not by needing to cram 4 columns next to the description.
 
 ## installation and run
 - clone this repo
@@ -10,7 +10,7 @@ this is a very small python script which takes `example-workout.yaml` and turns 
 - edit `example-workout.yaml` and `strokes.yaml` as desired
 - `make` — writes `example-workout-coach.pdf` and `example-workout-athlete.pdf` to the repo root
 - `make print` — same, then opens both PDFs in Preview
-- `make text` — old behavior, prints the plain-text swimmer/coach view to stdout
+- `make text` — prints the same plain-text layout (deindented, but without bold) to stdout
 
 or run it directly for more control:
 ```
