@@ -1,12 +1,14 @@
 import glob
 import os
-from typing import List, Optional, Tuple
+from typing import List, Literal, Optional, Tuple
 
 from reportlab.lib.pagesizes import landscape, letter
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
+
+Orientation = Literal["portrait", "landscape", "auto"]
 
 MARGIN: float = 36.0
 LINE_SPACING: float = 1.15
@@ -86,20 +88,32 @@ def _fit_font_size(
     return MIN_SIZE, _lines_per_page(MIN_SIZE, avail_height)
 
 
-def render_pdf(text: str, path: str, max_pages: int = 1) -> None:
-    lines: List[str] = [l.rstrip() for l in text.rstrip("\n").split("\n")]
-
-    page_size = letter
+def _fit_page_size(
+    lines: List[str], page_size: Tuple[float, float], max_pages: int
+) -> Tuple[float, int, Tuple[float, float]]:
     avail_w = page_size[0] - 2 * MARGIN
     avail_h = page_size[1] - 2 * MARGIN
     size, lpp = _fit_font_size(lines, avail_w, avail_h, max_pages)
+    return size, lpp, page_size
 
-    # if it still doesn't fit the width even at the smallest font, try landscape
-    if not _fits_width(lines, size, avail_w):
-        page_size = landscape(letter)
-        avail_w = page_size[0] - 2 * MARGIN
-        avail_h = page_size[1] - 2 * MARGIN
-        size, lpp = _fit_font_size(lines, avail_w, avail_h, max_pages)
+
+def render_pdf(
+    text: str, path: str, max_pages: int = 1, orientation: Orientation = "auto"
+) -> None:
+    lines: List[str] = [l.rstrip() for l in text.rstrip("\n").split("\n")]
+
+    if orientation == "portrait":
+        size, lpp, page_size = _fit_page_size(lines, letter, max_pages)
+    elif orientation == "landscape":
+        size, lpp, page_size = _fit_page_size(lines, landscape(letter), max_pages)
+    else:
+        # auto: pick whichever orientation fits the largest font size,
+        # preferring portrait on a tie
+        size, lpp, page_size = max(
+            _fit_page_size(lines, letter, max_pages),
+            _fit_page_size(lines, landscape(letter), max_pages),
+            key=lambda fit: fit[0],
+        )
 
     c = canvas.Canvas(path, pagesize=page_size)
     line_height = size * LINE_SPACING

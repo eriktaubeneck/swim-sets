@@ -322,6 +322,13 @@ def parse_args() -> argparse.Namespace:
         help="max pages to fit each document onto (default: 1)",
     )
     parser.add_argument(
+        "--orientation",
+        choices=["portrait", "landscape", "auto"],
+        default="auto",
+        help="page orientation; auto (default) picks whichever fits the "
+        "largest font",
+    )
+    parser.add_argument(
         "--print",
         dest="do_print",
         action="store_true",
@@ -360,11 +367,19 @@ def main():
     base: str = os.path.splitext(os.path.basename(args.workout))[0]
 
     coach_path = os.path.join(args.outdir, f"{base}-coach.pdf")
-    render_pdf(render_text(workout.rows(coach_view=True)), coach_path, max_pages=args.pages)
+    render_pdf(
+        render_text(workout.rows(coach_view=True)),
+        coach_path,
+        max_pages=args.pages,
+        orientation=args.orientation,
+    )
 
     athlete_path = os.path.join(args.outdir, f"{base}-athlete.pdf")
     render_pdf(
-        render_text(workout.rows(coach_view=False)), athlete_path, max_pages=args.pages
+        render_text(workout.rows(coach_view=False)),
+        athlete_path,
+        max_pages=args.pages,
+        orientation=args.orientation,
     )
 
     paths: List[str] = [coach_path, athlete_path]

@@ -17,7 +17,7 @@ or run it directly for more control:
 python swimsets.py path/to/workout.yaml --strokes strokes.yaml --outdir out/ --pages 1
 python swimsets.py path/to/workout.yaml --print   # also opens the PDFs in Preview
 ```
-`--pages n` sets the max pages each document should fit onto (default 1); the font size is picked automatically to fit, falling back to landscape if a line is too wide even at the smallest readable size.
+`--pages n` sets the max pages each document should fit onto (default 1); the font size is picked automatically to fit. `--orientation` is `portrait`, `landscape`, or `auto` (default), where `auto` renders both and keeps whichever lets the font be larger.
 
 the PDFs use [Berkeley Mono](https://berkeleygraphics.com/typefaces/berkeley-mono/) if it's installed (checked under `~/Library/Fonts`, `/Library/Fonts`, and `/System/Library/Fonts`), falling back to macOS's built-in Menlo, and finally to the PDF-standard Courier if neither is present — all three are monospace, which is what makes the lane-time columns line up.
 
