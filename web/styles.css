@@ -1,0 +1,914 @@
+/*
+ * styles.css - the practice sheet look, in light and dark.
+ *
+ * The editor and the rendered page share a type scale on purpose: what you
+ * type should sit where it will print.
+ */
+
+:root {
+  --bg: #fbfaf8;
+  --panel: #ffffff;
+  --ink: #1b1a18;
+  --ink-soft: #5f5b55;
+  --ink-faint: #918b83;
+  --line: #e4e0d9;
+  --line-strong: #cfc9c0;
+  --accent: #1c6b8c;
+  --accent-soft: #e6f1f6;
+  --on-accent: #ffffff;
+  --warn-bg: #fdf3e3;
+  --warn-ink: #7a5310;
+  --danger: #a13a2c;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+  --radius: 6px;
+}
+
+/*
+ * Dark palette, defined once and applied twice: for a viewer on the system
+ * default (nothing stamped on <html>), and for one who has explicitly chosen
+ * dark. The media query is guarded so an explicit light choice still wins on
+ * a dark OS. Only tokens are redefined here -- components always read the
+ * tokens, never a literal, so both themes resolve as a complete set.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181a;
+    --panel: #1d2023;
+    --ink: #e8e6e3;
+    --ink-soft: #a9a49d;
+    --ink-faint: #77726b;
+    --line: #2c3034;
+    --line-strong: #3d4247;
+    --accent: #6fb9d8;
+    --accent-soft: #1c2b33;
+    --on-accent: #0f1416;
+    --warn-bg: #33291a;
+    --warn-ink: #e2c184;
+    --danger: #e08376;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #16181a;
+  --panel: #1d2023;
+  --ink: #e8e6e3;
+  --ink-soft: #a9a49d;
+  --ink-faint: #77726b;
+  --line: #2c3034;
+  --line-strong: #3d4247;
+  --accent: #6fb9d8;
+  --accent-soft: #1c2b33;
+  --on-accent: #0f1416;
+  --warn-bg: #33291a;
+  --warn-ink: #e2c184;
+  --danger: #e08376;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 14px/1.45 var(--sans);
+  display: flex;
+  flex-direction: column;
+}
+
+/* --------------------------------------------------------------- toolbar */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.toolbar h1 {
+  margin: 0 6px 0 0;
+  font-size: 15px;
+  font-weight: 620;
+  letter-spacing: 0.02em;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 4px;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+button {
+  font: inherit;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 3px 9px;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.seg.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.warnings {
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+  padding: 8px 14px;
+  font-size: 12.5px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+}
+
+/* a class-level display beats the UA rule for [hidden], so restate it */
+.warnings[hidden] {
+  display: none;
+}
+
+.warn-dismiss {
+  margin-top: 4px;
+  font-size: 11px;
+  border-color: currentColor;
+  color: inherit;
+}
+
+/* ---------------------------------------------------------------- layout */
+
+main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  min-height: 0;
+}
+
+/*
+ * One pane means one column. Sizing the hidden column to 0 instead would put
+ * the surviving pane in it -- a display:none grid item stops taking a track,
+ * so the next one slides into its place.
+ */
+main[data-layout="edit"],
+main[data-layout="page"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+main[data-layout="edit"] .side {
+  display: none;
+}
+
+main[data-layout="page"] .doc-pane {
+  display: none;
+}
+
+main[data-layout="page"] .side {
+  border-left: none;
+}
+
+main[data-layout="page"] .card-body {
+  max-width: 900px;
+}
+
+.doc-pane,
+.side {
+  overflow: auto;
+  min-height: 0;
+}
+
+.side {
+  border-left: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.doc {
+  padding: 20px 22px 40vh;
+  max-width: 900px;
+}
+
+/* ------------------------------------------------------------- side cards */
+
+.card {
+  border-bottom: 1px solid var(--line);
+}
+
+.card > summary {
+  cursor: pointer;
+  padding: 9px 14px;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card > summary::marker {
+  color: var(--ink-faint);
+}
+
+.summary-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+.seg-mini .seg {
+  font-size: 11px;
+  padding: 1px 7px;
+}
+
+.card-body {
+  padding: 4px 14px 14px;
+}
+
+.page-body {
+  padding-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  flex-wrap: wrap;
+}
+
+.hint {
+  color: var(--ink-faint);
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+
+.step {
+  width: 26px;
+  text-align: center;
+  padding: 2px 0;
+}
+
+.lane-count {
+  min-width: 2ch;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 2px 4px;
+}
+
+textarea {
+  width: 100%;
+  font: 12px/1.5 var(--mono);
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 8px;
+  resize: vertical;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.totals-table th,
+.totals-table td,
+.strokes-table th,
+.strokes-table td,
+.e-grid th,
+.e-grid td {
+  text-align: left;
+  padding: 2px 6px 2px 0;
+  font-weight: 400;
+}
+
+.totals-table th,
+.strokes-table th,
+.e-grid th {
+  color: var(--ink-faint);
+  font-size: 12px;
+}
+
+.totals-table tr th:first-child {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.num {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.sub {
+  margin-top: 10px;
+  font-size: 12.5px;
+}
+
+.sub > summary {
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+
+.sub-row {
+  margin: 8px 0;
+}
+
+.sub-name {
+  font-weight: 600;
+}
+
+.sub-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+/* ---------------------------------------------------------- editor fields */
+
+.f {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0 3px;
+  min-width: 1ch;
+  /* widths are set in ch from the value's length, so padding must sit outside */
+  box-sizing: content-box;
+}
+
+.f:hover {
+  border-color: var(--line-strong);
+}
+
+.f:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--panel);
+}
+
+.f::placeholder {
+  color: var(--ink-faint);
+  opacity: 0.7;
+}
+
+.f-rounds,
+.f-distance,
+.f-time,
+.f-cell {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  /* widths are computed from the value; flex must not shrink them or the
+     numbers get clipped when the row runs out of room */
+  flex: none;
+}
+
+.f-stroke,
+.e-time {
+  flex: none;
+}
+
+.f-msg {
+  flex: 0 1 auto;
+  min-width: 8ch;
+}
+
+.f-stroke {
+  border-color: transparent;
+  padding: 0 2px;
+  /* reads as the stroke name in the sentence; the dropdown chrome only shows
+     once you go looking for it */
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.f-stroke:hover,
+.f-stroke:focus {
+  border-color: var(--line-strong);
+}
+
+/* ------------------------------------------------------------ editor tree */
+
+.e-set {
+  border-left: 1px solid transparent;
+}
+
+.e-set[data-depth="0"] > .e-head {
+  font-size: 19px;
+  font-weight: 640;
+  margin-bottom: 6px;
+}
+
+.e-set[data-depth="1"] > .e-head {
+  font-size: 15.5px;
+  font-weight: 600;
+  margin-top: 14px;
+}
+
+.e-children {
+  margin-left: 18px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line);
+}
+
+.e-set.collapsed > .e-children,
+.e-set.collapsed > .e-intervals,
+.e-set.collapsed > .e-detail {
+  display: none;
+}
+
+.e-head {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 0;
+  border-radius: var(--radius);
+}
+
+.e-head.drop-before {
+  box-shadow: 0 -2px 0 var(--accent);
+}
+
+.e-head.drop-after {
+  box-shadow: 0 2px 0 var(--accent);
+}
+
+.e-head.drop-inside {
+  background: var(--accent-soft);
+}
+
+.e-twisty,
+.e-twisty-spacer {
+  width: 18px;
+  flex: none;
+  border: none;
+  background: none;
+  color: var(--ink-faint);
+  padding: 0;
+  font-size: 11px;
+  text-align: left;
+}
+
+.e-grip {
+  cursor: grab;
+  color: var(--ink-faint);
+  opacity: 0;
+  padding: 0 2px;
+  font-size: 12px;
+}
+
+.e-set:hover > .e-head > .e-grip {
+  opacity: 1;
+}
+
+.e-set.dragging {
+  opacity: 0.45;
+}
+
+.e-x {
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  margin-right: 4px;
+}
+
+.f-rounds {
+  padding-right: 0;
+}
+
+.f-rounds:placeholder-shown + .e-x {
+  opacity: 0.2;
+}
+
+.e-edits {
+  color: var(--ink-faint);
+  font-size: 0.85em;
+  font-family: var(--mono);
+}
+
+.e-spacer {
+  flex: 1;
+}
+
+.e-statstoggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--ink-faint);
+  font-size: 12px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.e-statstoggle input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.e-set:hover > .e-head > .e-statstoggle,
+.e-statstoggle:has(input:checked) {
+  opacity: 1;
+}
+
+/* out of the flow entirely until hover, so the row's width is the practice
+   line and not the toolbar that follows it */
+.e-actions {
+  display: none;
+  gap: 1px;
+  flex: none;
+}
+
+.e-set:hover > .e-head > .e-actions,
+.e-head:focus-within > .e-actions {
+  display: flex;
+}
+
+.e-act {
+  border: none;
+  padding: 1px 4px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.2;
+}
+
+.e-act:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.e-danger:hover {
+  background: transparent;
+  color: var(--danger);
+}
+
+/* intervals */
+
+.e-intervals {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 2px 28px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/*
+ * A set with no interval (a superset, or one pinned to 0:00) prints no "@"
+ * line, so the editor hides it too -- until you hover, where it becomes the
+ * way to give the set an interval.
+ */
+.e-intervals.is-empty {
+  display: none;
+}
+
+.e-set:hover > .e-intervals.is-empty,
+.e-intervals.is-empty:focus-within {
+  display: flex;
+  opacity: 0.6;
+}
+
+/*
+ * Fields sitting at their default (one round, no distance, no stroke) print
+ * as nothing, so they show as nothing here too and appear on hover. What is
+ * left is the line as it prints: "4x 25 Free drill".
+ */
+.e-head .is-default,
+.e-head .f-rounds.is-default + .e-x {
+  display: none;
+}
+
+.e-set:hover > .e-head .is-default,
+.e-head:focus-within .is-default,
+.e-set:hover > .e-head .f-rounds.is-default + .e-x,
+.e-head:focus-within .f-rounds.is-default + .e-x {
+  display: inline-block;
+}
+
+/* The "notes" prompt keeps its click target but stays out of the way. */
+.f-msg::placeholder {
+  opacity: 0;
+}
+
+.e-set:hover > .e-head .f-msg::placeholder,
+.f-msg:focus::placeholder {
+  opacity: 0.6;
+}
+
+.e-at {
+  color: var(--ink-faint);
+}
+
+.e-time {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.e-lane {
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+
+.f-time.computed {
+  color: var(--ink-soft);
+}
+
+.e-intervals.is-explicit .f-time {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.e-note {
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.e-note:not(:empty)::before {
+  content: "(";
+}
+
+.e-note:not(:empty)::after {
+  content: ")";
+}
+
+.e-reset {
+  border: none;
+  color: var(--ink-faint);
+  padding: 0 4px;
+  opacity: 0;
+}
+
+.e-intervals.is-explicit .e-reset {
+  opacity: 1;
+}
+
+/* per-set totals under the head */
+
+.e-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 2px 0 4px 28px;
+}
+
+.e-stats:empty {
+  display: none;
+}
+
+.e-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  background: var(--accent-soft);
+  color: var(--ink-soft);
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+/* per-lane detail grid */
+
+.e-detail {
+  margin: 4px 0 8px 28px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  max-width: 640px;
+}
+
+.e-grid th {
+  padding-right: 10px;
+  white-space: nowrap;
+}
+
+.e-grid td .f-cell {
+  border-color: var(--line);
+  width: 5ch;
+}
+
+/* ------------------------------------------------------- rendered page */
+
+.r-page {
+  font-family: var(--sans);
+}
+
+.r-set[data-depth="0"] > .r-head > .r-title {
+  font-size: 18px;
+  font-weight: 640;
+}
+
+.r-set[data-depth="1"] > .r-head {
+  margin-top: 12px;
+}
+
+.r-set[data-depth="1"] > .r-head > .r-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.r-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.r-twisty,
+.r-twisty-spacer {
+  width: 16px;
+  flex: none;
+  border: none;
+  background: none;
+  color: var(--ink-faint);
+  padding: 0;
+  font-size: 10px;
+  text-align: left;
+}
+
+.r-children {
+  margin-left: 16px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line);
+}
+
+.r-set.collapsed > .r-children,
+.r-set.collapsed > .r-intervals,
+.r-set.collapsed > .r-statsbox {
+  display: none;
+}
+
+.r-edits {
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+.r-intervals {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: 1px 0 4px 22px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.r-at {
+  color: var(--ink-faint);
+}
+
+.r-time,
+.r-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.r-lane {
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+
+.r-note {
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.r-note::before {
+  content: "(";
+}
+
+.r-note::after {
+  content: ")";
+}
+
+.r-statsbox {
+  margin: 2px 0 4px 22px;
+}
+
+.r-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+.r-stats-secondary {
+  color: var(--ink-faint);
+}
+
+.r-stats-label {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  min-width: 62px;
+}
+
+/* ----------------------------------------------------------------- print */
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .toolbar,
+  main,
+  .warnings {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block;
+    padding: 0;
+  }
+
+  .r-set.collapsed > .r-children,
+  .r-set.collapsed > .r-intervals,
+  .r-set.collapsed > .r-statsbox {
+    display: block;
+  }
+
+  .r-twisty,
+  .r-twisty-spacer {
+    display: none;
+  }
+
+  .r-children {
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* --------------------------------------------------------------- narrow */
+
+@media (max-width: 860px) {
+  main,
+  main[data-layout="split"] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .side {
+    border-left: none;
+    border-top: 1px solid var(--line);
+  }
+
+  main[data-layout="page"] .side,
+  main[data-layout="edit"] .doc-pane {
+    display: block;
+  }
+}
