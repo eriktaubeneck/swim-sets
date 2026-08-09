@@ -2,6 +2,8 @@
 
 this is a very small python script which takes `example-workout.yaml` and prints out a swimset.
 
+there is also a front end editor in [`web/`](web/README.md) — open `web/index.html` in a browser (or `make serve`) to build a practice by hand, with a live rendered page, per-lane totals, configurable lanes and base times, and the same workout YAML in and out. it is a static page; the interval maths is ported to JavaScript and checked against this script over every file in `workouts/` (`make web-test`).
+
 ## installation and run
 - clone this repo
 - `cd swim-sets`
@@ -125,4 +127,4 @@ i will likely never actually get to these, and highly encourage forking this rep
 - better handling of lane count
 - tests?
 - package?
-- other output? LaTeX? HTML?
+- ~~other output? LaTeX? HTML?~~ HTML, see [`web/`](web/README.md)

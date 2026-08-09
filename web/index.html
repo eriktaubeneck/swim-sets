@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>swim sets</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="toolbar">
+      <h1>swim sets</h1>
+      <div class="toolbar-group">
+        <button id="btn-new" title="Start an empty practice">New</button>
+        <button id="btn-open" title="Open a workout .yaml">Open</button>
+        <button id="btn-save" title="Download as workout .yaml">Save</button>
+        <input type="file" id="file-input" accept=".yaml,.yml,text/yaml" hidden />
+      </div>
+      <div class="toolbar-group">
+        <button id="btn-undo" title="Undo (⌘Z)">Undo</button>
+        <button id="btn-redo" title="Redo (⇧⌘Z)">Redo</button>
+      </div>
+      <div class="toolbar-group">
+        <button id="btn-collapse" title="Collapse every superset">Collapse all</button>
+        <button id="btn-expand" title="Expand every superset">Expand all</button>
+      </div>
+      <div class="toolbar-spacer"></div>
+      <div class="toolbar-group" role="group" aria-label="Layout">
+        <button id="btn-layout-edit" class="seg" data-layout="edit">Edit</button>
+        <button id="btn-layout-split" class="seg" data-layout="split">Split</button>
+        <button id="btn-layout-page" class="seg" data-layout="page">Page</button>
+      </div>
+      <button id="btn-print" title="Print the rendered page">Print</button>
+    </header>
+
+    <div class="warnings" id="warnings" hidden></div>
+
+    <main id="main" data-layout="split">
+      <section class="doc-pane" id="doc-pane">
+        <div class="doc" id="doc"></div>
+      </section>
+
+      <aside class="side" id="side">
+        <details class="card" id="card-totals" open>
+          <summary>Totals per lane</summary>
+          <div class="card-body" id="totals"></div>
+        </details>
+
+        <details class="card" id="card-page" open>
+          <summary>
+            Rendered page
+            <span class="summary-actions">
+              <span class="seg-mini">
+                <button data-view="swimmer" class="seg" type="button">Swimmer</button>
+                <button data-view="coach" class="seg" type="button">Coach</button>
+              </span>
+            </span>
+          </summary>
+          <div class="card-body page-body" id="page"></div>
+        </details>
+
+        <details class="card" id="card-setup">
+          <summary>Lanes &amp; rounding</summary>
+          <div class="card-body" id="setup"></div>
+        </details>
+
+        <details class="card" id="card-strokes">
+          <summary>Base times per 100</summary>
+          <div class="card-body" id="strokes"></div>
+        </details>
+
+        <details class="card" id="card-yaml">
+          <summary>YAML</summary>
+          <div class="card-body">
+            <textarea id="yaml" spellcheck="false" rows="16"></textarea>
+            <div class="row">
+              <button id="btn-yaml-apply">Apply</button>
+              <button id="btn-yaml-copy">Copy</button>
+              <span class="hint" id="yaml-status"></span>
+            </div>
+          </div>
+        </details>
+      </aside>
+    </main>
+
+    <div class="print-only" id="print-page"></div>
+
+    <script src="js/yaml.js"></script>
+    <script src="js/model.js"></script>
+    <script src="js/workout.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/editor.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
