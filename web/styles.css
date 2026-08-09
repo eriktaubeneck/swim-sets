@@ -15,6 +15,7 @@
   --line-strong: #cfc9c0;
   --accent: #1c6b8c;
   --accent-soft: #e6f1f6;
+  --on-accent: #ffffff;
   --warn-bg: #fdf3e3;
   --warn-ink: #7a5310;
   --danger: #a13a2c;
@@ -23,8 +24,15 @@
   --radius: 6px;
 }
 
+/*
+ * Dark palette, defined once and applied twice: for a viewer on the system
+ * default (nothing stamped on <html>), and for one who has explicitly chosen
+ * dark. The media query is guarded so an explicit light choice still wins on
+ * a dark OS. Only tokens are redefined here -- components always read the
+ * tokens, never a literal, so both themes resolve as a complete set.
+ */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #16181a;
     --panel: #1d2023;
     --ink: #e8e6e3;
@@ -34,10 +42,27 @@
     --line-strong: #3d4247;
     --accent: #6fb9d8;
     --accent-soft: #1c2b33;
+    --on-accent: #0f1416;
     --warn-bg: #33291a;
     --warn-ink: #e2c184;
     --danger: #e08376;
   }
+}
+
+:root[data-theme="dark"] {
+  --bg: #16181a;
+  --panel: #1d2023;
+  --ink: #e8e6e3;
+  --ink-soft: #a9a49d;
+  --ink-faint: #77726b;
+  --line: #2c3034;
+  --line-strong: #3d4247;
+  --accent: #6fb9d8;
+  --accent-soft: #1c2b33;
+  --on-accent: #0f1416;
+  --warn-bg: #33291a;
+  --warn-ink: #e2c184;
+  --danger: #e08376;
 }
 
 * {
@@ -112,13 +137,7 @@ button:disabled {
 .seg.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
-}
-
-@media (prefers-color-scheme: dark) {
-  .seg.active {
-    color: #0f1416;
-  }
+  color: var(--on-accent);
 }
 
 .warnings {
@@ -131,6 +150,11 @@ button:disabled {
   flex-direction: column;
   gap: 2px;
   align-items: flex-start;
+}
+
+/* a class-level display beats the UA rule for [hidden], so restate it */
+.warnings[hidden] {
+  display: none;
 }
 
 .warn-dismiss {
@@ -149,16 +173,18 @@ main {
   min-height: 0;
 }
 
-main[data-layout="edit"] {
-  grid-template-columns: minmax(0, 1fr) 0;
+/*
+ * One pane means one column. Sizing the hidden column to 0 instead would put
+ * the surviving pane in it -- a display:none grid item stops taking a track,
+ * so the next one slides into its place.
+ */
+main[data-layout="edit"],
+main[data-layout="page"] {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 main[data-layout="edit"] .side {
   display: none;
-}
-
-main[data-layout="page"] {
-  grid-template-columns: 0 minmax(0, 1fr);
 }
 
 main[data-layout="page"] .doc-pane {
@@ -167,6 +193,10 @@ main[data-layout="page"] .doc-pane {
 
 main[data-layout="page"] .side {
   border-left: none;
+}
+
+main[data-layout="page"] .card-body {
+  max-width: 900px;
 }
 
 .doc-pane,
@@ -369,6 +399,14 @@ table {
   font-family: var(--mono);
   font-variant-numeric: tabular-nums;
   text-align: right;
+  /* widths are computed from the value; flex must not shrink them or the
+     numbers get clipped when the row runs out of room */
+  flex: none;
+}
+
+.f-stroke,
+.e-time {
+  flex: none;
 }
 
 .f-msg {
@@ -512,16 +550,17 @@ table {
   opacity: 1;
 }
 
+/* out of the flow entirely until hover, so the row's width is the practice
+   line and not the toolbar that follows it */
 .e-actions {
-  display: flex;
+  display: none;
   gap: 1px;
-  opacity: 0;
   flex: none;
 }
 
 .e-set:hover > .e-head > .e-actions,
 .e-head:focus-within > .e-actions {
-  opacity: 1;
+  display: flex;
 }
 
 .e-act {
