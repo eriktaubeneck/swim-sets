@@ -288,18 +288,33 @@ def render_text(rows: List[Row]) -> str:
     # the title (rows[0]) stays flush left; everything else is deindented by
     # one level, since a level was already "used up" wrapping the top-level
     # sections under the title
-    cell_width: int = max(
-        (len(t) for r in rows for t in r.lane_times), default=0
+    prefixes: List[str] = [
+        "    " * (row.indent if i == 0 else max(row.indent - 1, 0)) + row.text
+        for i, row in enumerate(rows)
+    ]
+
+    # each lane gets its own column width, so one annotated cell like
+    # "3:20 (6x, 150)" only widens its own column instead of every lane on
+    # every line, and all the lane-time rows start at the same absolute
+    # column regardless of how deeply their set is nested, so the numbers
+    # line up down the page
+    lane_rows: List[List[str]] = [row.lane_times for row in rows if row.lane_times]
+    columns: int = max((len(times) for times in lane_rows), default=0)
+    cell_widths: List[int] = [
+        max((len(times[i]) for times in lane_rows if i < len(times)), default=0)
+        for i in range(columns)
+    ]
+    times_start: int = max(
+        (len(p) for p, row in zip(prefixes, rows) if row.lane_times), default=0
     )
+
     lines: List[str] = []
-    for i, row in enumerate(rows):
-        indent = row.indent if i == 0 else max(row.indent - 1, 0)
-        pad = "    " * indent
+    for prefix, row in zip(prefixes, rows):
         if row.lane_times:
-            cells = "  ".join(t.rjust(cell_width) for t in row.lane_times)
-            lines.append(f"{pad}{row.text} {cells}")
+            cells = "  ".join(t.rjust(w) for t, w in zip(row.lane_times, cell_widths))
+            lines.append(f"{prefix.ljust(times_start)} {cells}")
         else:
-            lines.append(f"{pad}{row.text}")
+            lines.append(prefix)
     return "\n".join(lines)
 
 

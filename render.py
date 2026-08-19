@@ -1,6 +1,6 @@
 import glob
 import os
-from typing import List, Literal, Optional, Tuple
+from typing import List, Literal, NamedTuple, Optional, Tuple
 
 from reportlab.lib.pagesizes import landscape, letter
 from reportlab.pdfbase import pdfmetrics
@@ -37,7 +37,9 @@ def _find_font_file(pattern: str, exclude: str = "") -> Optional[str]:
 def _register_monospace_font() -> Tuple[str, str]:
     # prefer Berkeley Mono, then macOS's built-in Menlo, then the PDF-standard
     # Courier that's always available with no font files needed
-    berkeley_regular = _find_font_file("*[Bb]erkeley*[Mm]ono*[Rr]egular*.[ot]tf")
+    berkeley_regular = _find_font_file(
+        "*[Bb]erkeley*[Mm]ono*[Rr]egular*.[ot]tf", exclude="italic"
+    )
     berkeley_bold = _find_font_file(
         "*[Bb]erkeley*[Mm]ono*[Bb]old*.[ot]tf", exclude="italic"
     )
@@ -73,28 +75,37 @@ def _fits_width(lines: List[str], font_size: float, avail_width: float) -> bool:
     return max(widths) <= avail_width
 
 
+class Fit(NamedTuple):
+    font_size: float
+    lines_per_page: int
+    page_size: Tuple[float, float]
+    # False when nothing in the size range fit, i.e. font_size is the
+    # best-effort MIN_SIZE rather than a size that actually works
+    fits: bool
+
+
 def _fit_font_size(
     lines: List[str], avail_width: float, avail_height: float, max_pages: int
-) -> Tuple[float, int]:
+) -> Tuple[float, int, bool]:
     size = MAX_SIZE
     while size >= MIN_SIZE:
         if _fits_width(lines, size, avail_width):
             lpp = _lines_per_page(size, avail_height)
             pages_needed = -(-len(lines) // lpp) if lines else 1
             if pages_needed <= max_pages:
-                return size, lpp
+                return size, lpp, True
         size -= SIZE_STEP
     # best effort: smallest size, however many pages that actually takes
-    return MIN_SIZE, _lines_per_page(MIN_SIZE, avail_height)
+    return MIN_SIZE, _lines_per_page(MIN_SIZE, avail_height), False
 
 
 def _fit_page_size(
     lines: List[str], page_size: Tuple[float, float], max_pages: int
-) -> Tuple[float, int, Tuple[float, float]]:
+) -> Fit:
     avail_w = page_size[0] - 2 * MARGIN
     avail_h = page_size[1] - 2 * MARGIN
-    size, lpp = _fit_font_size(lines, avail_w, avail_h, max_pages)
-    return size, lpp, page_size
+    size, lpp, fits = _fit_font_size(lines, avail_w, avail_h, max_pages)
+    return Fit(size, lpp, page_size, fits)
 
 
 def render_pdf(
@@ -103,18 +114,21 @@ def render_pdf(
     lines: List[str] = [l.rstrip() for l in text.rstrip("\n").split("\n")]
 
     if orientation == "portrait":
-        size, lpp, page_size = _fit_page_size(lines, letter, max_pages)
+        fit = _fit_page_size(lines, letter, max_pages)
     elif orientation == "landscape":
-        size, lpp, page_size = _fit_page_size(lines, landscape(letter), max_pages)
+        fit = _fit_page_size(lines, landscape(letter), max_pages)
     else:
-        # auto: pick whichever orientation fits the largest font size,
-        # preferring portrait on a tie
-        size, lpp, page_size = max(
+        # auto: pick whichever orientation fits the largest font size. when
+        # neither fits, both come back at MIN_SIZE, so break that tie on
+        # whether the orientation fit at all -- that is the case landscape
+        # exists to rescue. portrait still wins a tie between two real fits.
+        fit = max(
             _fit_page_size(lines, letter, max_pages),
             _fit_page_size(lines, landscape(letter), max_pages),
-            key=lambda fit: fit[0],
+            key=lambda f: (f.font_size, f.fits),
         )
 
+    size, lpp, page_size = fit.font_size, fit.lines_per_page, fit.page_size
     c = canvas.Canvas(path, pagesize=page_size)
     line_height = size * LINE_SPACING
     page_top = page_size[1] - MARGIN - size
