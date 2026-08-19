@@ -1,9 +1,22 @@
+import argparse
+import os
+import subprocess
+from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Any, Callable, Dict, List, Optional, Union, cast
 
 from ruamel.yaml import YAML
 
+from render import render_pdf
+
 zero_seconds: timedelta = timedelta(seconds=0)
+
+
+@dataclass
+class Row:
+    indent: int
+    text: str
+    lane_times: List[str] = field(default_factory=list)
 
 
 def build_timedelta(time: str) -> timedelta:
@@ -202,42 +215,13 @@ class SwimSet:
             return ""
         return f"{self.max_distance} "
 
-    @property
-    def time_str(self) -> str:
-        if not self.max_time:
-            return ""
-        dist: List[str] = [
-            f"{d}" if d != self.max_distance else "" for d in self.distance
-        ]
-        rnds: List[str] = [f"{r}" if r != self.max_rounds else "" for r in self.rounds]
-        self.time = [t if r > 0 else timedelta(0) for t, r in zip(self.time, self.rounds)]
-
-        dist_rnds: List[str] = []
-        for d, r in zip(dist, rnds):
-            if d and r and not (d == "0" or r == "0"):
-                dist_rnds.append(f"({r}x, {d})")
-            elif r:
-                dist_rnds.append(f"({r}x)")
-            elif d:
-                dist_rnds.append(f"({d})")
-            else:
-                dist_rnds.append("")
-
-        tm_str: str = "  ".join(
-            [self.print_dt(t) + dr for t, dr in zip(self.time, dist_rnds)]
-        )
-        return f"\n    @ {tm_str} "
-
-    @property
-    def full_stats_str(self) -> str:
+    def full_stats_lines(self) -> List[str]:
         if not self.print_full_stats:
-            return ""
+            return []
         totals: str = ", ".join(
             f"L{i+1}:{d}@{self.print_dt(t)}"
             for i, (t, d) in enumerate(zip(self.total_time, self.total_distance))
         )
-        fs_str: str
-
         if self.max_rounds > 1:
             per_round: str = ", ".join(
                 f"L{i+1}:{int(d/r)}@{self.print_dt(t/r)}"
@@ -245,51 +229,180 @@ class SwimSet:
                     zip(self.total_time, self.total_distance, self.rounds)
                 )
             )
-            fs_str = f"\ntotal     - {totals} "
-            fs_str += f"\nper round - {per_round}"
-        else:
-            fs_str = f"\ntotal - {totals} "
-        return fs_str
+            return [f"total     - {totals}", f"per round - {per_round}"]
+        return [f"total - {totals}"]
 
-    def pprint(self, coach_view: bool = False) -> str:
-        msg: str = f"{self.rounds_str}{self.distance_str}"
-        msg += (
-            f'{bool(self.stroke)*(" "+str(self.stroke)+" "*bool(self.msg))}{self.msg} '
+    def rows(self, coach_view: bool = False, indent: int = 0) -> List[Row]:
+        text: str = f"{self.rounds_str}{self.distance_str}"
+        text += (
+            f'{bool(self.stroke)*(" "+str(self.stroke)+" "*bool(self.msg))}{self.msg}'
         )
-        msg += f"{self.round_edits}"
+        rows: List[Row]
+        if not self.max_time:
+            text += f" {self.round_edits}"
+            rows = [Row(indent, text.strip())]
+        else:
+            times: List[timedelta] = [
+                t if r > 0 else zero_seconds for t, r in zip(self.time, self.rounds)
+            ]
+            uniform: bool = (
+                len(set(self.distance)) == 1
+                and len(set(self.rounds)) == 1
+                and len(set(times)) == 1
+            )
+            if uniform:
+                text += f" @ {self.print_dt(times[0])}"
+                rows = [Row(indent, text.strip())]
+            else:
+                dist: List[str] = [
+                    f"{d}" if d != self.max_distance else "" for d in self.distance
+                ]
+                rnds: List[str] = [
+                    f"{r}" if r != self.max_rounds else "" for r in self.rounds
+                ]
+                annotations: List[str] = []
+                for d, r in zip(dist, rnds):
+                    if d and r and not (d == "0" or r == "0"):
+                        annotations.append(f" ({r}x, {d})")
+                    elif r:
+                        annotations.append(f" ({r}x)")
+                    elif d:
+                        annotations.append(f" ({d})")
+                    else:
+                        annotations.append("")
+                lane_times: List[str] = [
+                    f"{self.print_dt(t)}{a}" for t, a in zip(times, annotations)
+                ]
+                rows = [
+                    Row(indent, text.strip()),
+                    Row(indent + 1, "@", lane_times),
+                ]
         if coach_view:
-            msg += f"{self.full_stats_str}"
-        msg += f"{self.time_str}\n"
+            rows.extend(Row(indent, line) for line in self.full_stats_lines())
+        for s in self.subsets:
+            rows.extend(s.rows(coach_view, indent + 1))
+        return rows
 
-        submsgs: List[str] = "".join(
-            [s.pprint(coach_view) for s in self.subsets]
-        ).split("\n")
-        submsg: str = "".join([f"    {s}\n" for s in submsgs if s])
-        msg += f"{submsg}"
-        return msg
 
-    def __repr__(self):
-        # remove the first 4 spaces to align everything to the title
-        return "\n".join([l.removeprefix("    ") for l in self.pprint().split("\n")])
+def render_text(rows: List[Row]) -> str:
+    # the title (rows[0]) stays flush left; everything else is deindented by
+    # one level, since a level was already "used up" wrapping the top-level
+    # sections under the title
+    prefixes: List[str] = [
+        "    " * (row.indent if i == 0 else max(row.indent - 1, 0)) + row.text
+        for i, row in enumerate(rows)
+    ]
+
+    # each lane gets its own column width, so one annotated cell like
+    # "3:20 (6x, 150)" only widens its own column instead of every lane on
+    # every line, and all the lane-time rows start at the same absolute
+    # column regardless of how deeply their set is nested, so the numbers
+    # line up down the page
+    lane_rows: List[List[str]] = [row.lane_times for row in rows if row.lane_times]
+    columns: int = max((len(times) for times in lane_rows), default=0)
+    cell_widths: List[int] = [
+        max((len(times[i]) for times in lane_rows if i < len(times)), default=0)
+        for i in range(columns)
+    ]
+    times_start: int = max(
+        (len(p) for p, row in zip(prefixes, rows) if row.lane_times), default=0
+    )
+
+    lines: List[str] = []
+    for prefix, row in zip(prefixes, rows):
+        if row.lane_times:
+            cells = "  ".join(t.rjust(w) for t, w in zip(row.lane_times, cell_widths))
+            lines.append(f"{prefix.ljust(times_start)} {cells}")
+        else:
+            lines.append(prefix)
+    return "\n".join(lines)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Render a swim workout to printable PDFs: a coach copy with "
+        "stats, and an athlete copy with all lanes' times."
+    )
+    parser.add_argument(
+        "workout", nargs="?", default="example-workout.yaml", help="workout yaml file"
+    )
+    parser.add_argument("--strokes", default="strokes.yaml", help="strokes yaml file")
+    parser.add_argument(
+        "--outdir", default=".", help="directory to write PDFs to"
+    )
+    parser.add_argument(
+        "--pages",
+        type=int,
+        default=1,
+        help="max pages to fit each document onto (default: 1)",
+    )
+    parser.add_argument(
+        "--orientation",
+        choices=["portrait", "landscape", "auto"],
+        default="auto",
+        help="page orientation; auto (default) picks whichever fits the "
+        "largest font",
+    )
+    parser.add_argument(
+        "--print",
+        dest="do_print",
+        action="store_true",
+        help="open the generated PDFs in Preview",
+    )
+    parser.add_argument(
+        "--text",
+        action="store_true",
+        help="print plain text to stdout instead of generating PDFs",
+    )
+    return parser.parse_args()
 
 
 def main():
-    yaml = YAML(typ="safe")
-    strokes_yaml: str = "strokes.yaml"
-    with open(strokes_yaml, "r") as f:
-        strokes_dict: Dict[Any, Any] = yaml.load(f)
+    args = parse_args()
 
+    yaml = YAML(typ="safe")
+    with open(args.strokes, "r") as f:
+        strokes_dict: Dict[Any, Any] = yaml.load(f)
     strokes = {cast(str, k): Stroke(**v) for k, v in strokes_dict.items()}
 
-    workout_yaml: str = "example-workout.yaml"
-    with open(workout_yaml, "r") as f:
+    with open(args.workout, "r") as f:
         workout_dict: Dict[Any, Any] = yaml.load(f)
     workout: SwimSet = SwimSet.build_from_nested_dict(
         workout_dict,
         strokes_config=strokes,
     )
-    print(workout)
-    print(workout.pprint(coach_view=True))
+
+    if args.text:
+        print(render_text(workout.rows(coach_view=False)))
+        print()
+        print(render_text(workout.rows(coach_view=True)))
+        return
+
+    os.makedirs(args.outdir, exist_ok=True)
+    base: str = os.path.splitext(os.path.basename(args.workout))[0]
+
+    coach_path = os.path.join(args.outdir, f"{base}-coach.pdf")
+    render_pdf(
+        render_text(workout.rows(coach_view=True)),
+        coach_path,
+        max_pages=args.pages,
+        orientation=args.orientation,
+    )
+
+    athlete_path = os.path.join(args.outdir, f"{base}-athlete.pdf")
+    render_pdf(
+        render_text(workout.rows(coach_view=False)),
+        athlete_path,
+        max_pages=args.pages,
+        orientation=args.orientation,
+    )
+
+    paths: List[str] = [coach_path, athlete_path]
+    for path in paths:
+        print(f"wrote {path}")
+
+    if args.do_print:
+        subprocess.run(["open", *paths], check=True)
 
 
 if __name__ == "__main__":

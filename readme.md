@@ -1,6 +1,6 @@
 # swimsets.py
 
-this is a very small python script which takes `example-workout.yaml` and prints out a swimset.
+this is a very small python script which takes `example-workout.yaml` and turns it into two printable PDFs: a coach copy (with stats) and an athlete copy (all 4 lanes' times, no stats). the title is bold and everything below it is deindented one level; each set's lane times sit on their own line right underneath it (e.g. `4x 50  Kick` then `    @ 1:10  1:15  1:30  1:40`), each lane gets its own column width, and every lane-time line starts its numbers at the same column no matter how deeply nested its set is, so all four lanes line up down the page. (giving each lane its own width matters: one annotated cell like `3:20 (6x, 150)` would otherwise pad every lane on every line out to that width.) if a set's distance, rounds, and time are the same for every lane, the time is just written once inline instead (e.g. `Warm Up @ 12:00`). each PDF auto-shrinks its font to fit on a single page (or however many pages you ask for) — since times are on their own line, the font size is normally limited by the widest single line, not by needing to cram 4 columns next to the description.
 
 ## installation and run
 - clone this repo
@@ -8,7 +8,18 @@ this is a very small python script which takes `example-workout.yaml` and prints
 - `virtualenv -p python3 venv`
 - `source venv/bin/activate`
 - edit `example-workout.yaml` and `strokes.yaml` as desired
-- `make`
+- `make` — writes `example-workout-coach.pdf` and `example-workout-athlete.pdf` to the repo root
+- `make print` — same, then opens both PDFs in Preview
+- `make text` — prints the same plain-text layout (deindented, but without bold) to stdout
+
+or run it directly for more control:
+```
+python swimsets.py path/to/workout.yaml --strokes strokes.yaml --outdir out/ --pages 1
+python swimsets.py path/to/workout.yaml --print   # also opens the PDFs in Preview
+```
+`--pages n` sets the max pages each document should fit onto (default 1); the font size is picked automatically to fit. `--orientation` is `portrait`, `landscape`, or `auto` (default), where `auto` measures both and keeps whichever lets the font be larger, falling back to landscape when a line is too wide for portrait even at the smallest readable size.
+
+the PDFs use [Berkeley Mono](https://berkeleygraphics.com/typefaces/berkeley-mono/) if it's installed (checked under `~/Library/Fonts`, `/Library/Fonts`, and `/System/Library/Fonts`), falling back to macOS's built-in Menlo, and finally to the PDF-standard Courier if neither is present — all three are monospace, which is what makes the lane-time columns line up.
 
 ## data structure
 
@@ -121,7 +132,6 @@ total - L1:8000@1:26:15, L2:8000@1:36:15, L3:7500@1:36:15, L4:6750@1:40:50
 ## todo
 i will likely never actually get to these, and highly encourage forking this repo if you want to expand on it at all
 
-- real cli
 - better handling of lane count
 - tests?
 - package?
