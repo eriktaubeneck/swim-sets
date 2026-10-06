@@ -1,0 +1,66 @@
+msg: Tuesday, Sep 29, 2026 - Breaststroke
+print_full_stats: True
+subsets:
+  - msg: Warm Up
+    time: 12:00
+    print_full_stats: True
+    subsets:
+      - distance: 300
+        stroke: free
+        time: 0:00
+      - distance: 200
+        stroke: kick
+        time: 0:00
+      - distance: 100
+        stroke: im
+        time: 0:00
+
+  - msg: Preset
+    print_full_stats: True
+    rounds: 3
+    subsets:
+      - distance: 50
+        stroke: kick
+        additional: 0:10
+        msg: brst kick on back, heels to hands
+      - distance: 25
+        rounds: 2
+        stroke: breast
+        additional: 0:10
+        msg: underwater pull-outs
+      - distance: 50
+        stroke: breast
+        additional: 0:10
+        msg: 1 pull, 2 kick
+      - distance: 50
+        rounds: [1, 1, 0, 0]
+        stroke: breast
+        additional: 0:10
+        msg: pull w/ flutter kick
+      - distance: 50
+        stroke: free
+        msg: easy, fill to 6:00
+        time: [2:00, 1:35, 2:00, 1:25]
+
+  - msg: Main Set
+    print_full_stats: True
+    rounds: 3
+    subsets:
+      - distance: 100
+        stroke: free
+        additional: 0:10
+        msg: strong
+      - distance: 50
+        rounds: [4, 4, 3, 3]
+        stroke: breast
+        additional: 0:10
+        msg: descend
+      - distance: 75
+        rounds: [2, 2, 2, 1]
+        stroke: free
+        additional: 0:05
+        msg: 80% effort
+      - distance: [100, 50, 50, 50]
+        stroke: ez
+        msg: fill to 10:00
+        time: [2:40, 2:00, 1:55, 1:45]
